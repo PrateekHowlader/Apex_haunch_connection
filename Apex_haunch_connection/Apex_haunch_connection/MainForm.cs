@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+
+using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Apex_haunch_connection
 {
@@ -38,6 +41,30 @@ namespace Apex_haunch_connection
         private void OkApplyModifyGetOnOffCancel_CancelClicked(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void OkApplyModifyGetOnOffCancel_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+            foreach (ComboBox item in new List<ComboBox> { comboBox5, comboBox4, comboBox6, comboBox7, comboBox8, comboBox9, comboBox10 })
+            {
+                item.Items.Add("Yes");
+                item.Items.Add("no");
+            }
+
+            comboBox5.SelectedIndex = 0;
+            comboBox6.SelectedIndex = 0;
+            comboBox7.SelectedIndex = 1;
+            comboBox8.SelectedIndex = 1;
+            comboBox9.SelectedIndex = 0;
+            comboBox10.SelectedIndex = 1;
+
+            comboBox4.SelectedIndex = 0;
         }
     }
 }
