@@ -1,0 +1,26 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Beta/v17
+/Apex_haunch_connection/.vs/Apex_haunch_connection
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.AssemblyInfoInputs.cache
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.assets.cache
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.csproj.CoreCompileInputs.cache
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.csproj.FileListAbsolute.txt
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.csproj.GenerateResource.cache
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.GeneratedMSBuildEditorConfig.editorconfig
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.MainForm.resources
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.Properties.Resources.resources
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.sourcelink.json
+/Apex_haunch_connection/Apex_haunch_connection/obj/project.nuget.cache
+/.vs
+/Apex_haunch_connection/.vs/ProjectEvaluation
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.AssemblyInfo.cs
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.AssemblyInfoInputs.cache
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.assets.cache
+/Apex_haunch_connection/Apex_haunch_connection/obj/Debug/net48/Apex_haunch_connection.GeneratedMSBuildEditorConfig.editorconfig
+/Apex_haunch_connection/Apex_haunch_connection/obj/Apex_haunch_connection.csproj.nuget.dgspec.json
+/Apex_haunch_connection/Apex_haunch_connection/obj/project.assets.json
+/Apex_haunch_connection/Apex_haunch_connection/obj/project.nuget.cache
