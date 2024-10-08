@@ -66,5 +66,15 @@ namespace Apex_haunch_connection
 
             comboBox4.SelectedIndex = 0;
         }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialCatalog1_Load(object sender, EventArgs e)
+        {
+            textBox10.v
+        }
     }
 }

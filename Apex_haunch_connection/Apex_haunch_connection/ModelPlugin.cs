@@ -83,9 +83,6 @@ namespace Apex_haunch_connection
         [StructuresField("BA1OffsetX")]
         public double BA1OffsetX;
 
-        [StructuresField("BA1OffsetY")]
-        public double BA1OffsetY;
-
         [StructuresField("HaunchWebThickness")]
         public double HaunchWebThickness;
 
@@ -128,7 +125,7 @@ namespace Apex_haunch_connection
         private int _FlagNut1;
         private int _FlagNut2;
         private double _BA1OffsetX;
-        private double _BA1OffsetY;
+      
         private double _HaunchWebThickness;
         private double _HaunchFlangeThickness;
         private double _HaunchWidth;
@@ -208,7 +205,7 @@ namespace Apex_haunch_connection
                 Beam beam1 = myModel.SelectModelObject(Input[0].GetInput() as Identifier) as Beam;
                 Beam beam2 = myModel.SelectModelObject(Input[1].GetInput() as Identifier) as Beam;
                 GeometricPlane geometricPlane = Fitparts(beam1 as Part, beam2 as Part, _PlateThickness1, _PlateThickness2);
-                ArrayList plates = Plates(beam1, beam2, _PlateHightTop, _PlateHightMid, _PlateHightBottom, _PlateWidth, geometricPlane, _PlateThickness1, _PlateThickness2);
+                ArrayList plates = Plates(beam1, beam2, _PlateHightTop, _PlateHightMid, _PlateHightBottom, _PlateWidth,  _PlateThickness1, _PlateThickness2);
                 boltArray(plates, beam1, beam2);
                 Hunch(beam1, beam2, plates, _PlateHightBottom, _HaunchWebThickness, _HaunchFlangeThickness, _HaunchWidth);
             }
@@ -246,7 +243,7 @@ namespace Apex_haunch_connection
             _BA1xCount = Data.BA1xCount;
             _BA1xText = Data.BA1xText;
             _BA1OffsetX = Data.BA1OffsetX;
-            _BA1OffsetY = Data.BA1OffsetY;
+          
             _HaunchFlangeThickness = Data.HaunchFlangeThickness;
             _HaunchWebThickness = Data.HaunchWebThickness;
             _HaunchWidth = Data.HaunchWidth;
@@ -323,8 +320,7 @@ namespace Apex_haunch_connection
 
             if (IsDefaultValue(_BA1OffsetX))
             { _BA1OffsetX = 0; }
-            if (IsDefaultValue(_BA1OffsetY))
-            { _BA1OffsetY = 0; }
+    
             if (IsDefaultValue(_HaunchFlangeThickness))
             { _HaunchFlangeThickness = 10; }
             if (IsDefaultValue(_HaunchWebThickness))
@@ -339,64 +335,84 @@ namespace Apex_haunch_connection
             List<Face_> part2_Face = get_faces(part2);
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
+
             LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
             Point intersectionMidPoint = MidPoint(intersectLineSegment.StartPoint, intersectLineSegment.EndPoint);
-            GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1_Face[5].Face),
-                planeA2 = ConvertFaceToGeometricPlane(part1_Face[11].Face),
-                planeB1 = ConvertFaceToGeometricPlane(part2_Face[5].Face),
-                planeB2 = ConvertFaceToGeometricPlane(part2_Face[11].Face);
-
-            Line line1 = Intersection.PlaneToPlane(planeA1, planeB1),
-            line2 = Intersection.PlaneToPlane(planeA1, planeB2),
-            line3 = Intersection.PlaneToPlane(planeA2, planeB1),
-            line4 = Intersection.PlaneToPlane(planeA2, planeB2);
-            GeometricPlane geometricPlane;
-            Point p1, p2, p3;
-            double d1 = DistanceBetweenParallelLines(line1, line4),
-                d2 = DistanceBetweenParallelLines(line2, line3);
-
-            if (d1 < d2)
+            double d1 = Distance.PointToPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point),
+                d2 = Distance.PointToPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
+            Point p1, p2;
+            if (d1 > d2)
             {
-                p1 = Intersection.LineToPlane(line1, ConvertFaceToGeometricPlane(part1_Face[0].Face));
-                p2 = Intersection.LineToPlane(line1, ConvertFaceToGeometricPlane(part1_Face[10].Face));
-                p3 = Intersection.LineToPlane(line4, ConvertFaceToGeometricPlane(part1_Face[0].Face));
-                geometricPlane = CreatePlaneFromThreePoints(p1, p2, p3);
+                if (Distance.PointToPoint(intersectionMidPoint, part1_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part1_centerLine[1] as Point))
+                {
+                    p1 = FindPointOnLine(part1_centerLine[0] as Point, part1_centerLine[1] as Point, d1 - d2);
+                }
+                else
+                    p1 = FindPointOnLine(part1_centerLine[1] as Point, part1_centerLine[0] as Point, d1 - d2);
+
+                if (Distance.PointToPoint(intersectionMidPoint, part2_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part2_centerLine[1] as Point))
+                    p2 = part2_centerLine[0] as Point;
+                else
+                    p2 = part2_centerLine[1] as Point;
+
+
             }
             else
             {
-                p1 = Intersection.LineToPlane(line2, ConvertFaceToGeometricPlane(part1_Face[0].Face));
-                p2 = Intersection.LineToPlane(line2, ConvertFaceToGeometricPlane(part1_Face[10].Face));
-                p3 = Intersection.LineToPlane(line3, ConvertFaceToGeometricPlane(part1_Face[0].Face));
-                geometricPlane = CreatePlaneFromThreePoints(p1, p2, p3);
+                if (Distance.PointToPoint(intersectionMidPoint, part2_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part2_centerLine[1] as Point))
+                {
+                    p1 = FindPointOnLine(part2_centerLine[0] as Point, part2_centerLine[1] as Point, d2 - d1);
+                }
+                else
+                    p1 = FindPointOnLine(part2_centerLine[1] as Point, part2_centerLine[0] as Point, d2 - d1);
+
+                if (Distance.PointToPoint(intersectionMidPoint, part1_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part1_centerLine[1] as Point))
+                    p2 = part1_centerLine[0] as Point;
+                else
+                    p2 = part1_centerLine[1] as Point;
+
             }
+            GeometricPlane newplain = CreatePlaneFromThreePoints(intersectionMidPoint, p1, p2);
+            Point mid = MidPoint(p1, p2);
+            Point point3 = mid + newplain.GetNormal() * 50;
+            GeometricPlane fittingPlain = CreatePlaneFromThreePoints(intersectionMidPoint, mid, point3);
+
             Fitting fitting = new Fitting();
+            Point point1 = intersectionMidPoint + thickness1*fittingPlain.GetNormal() ;
+            
 
-            Vector vector = geometricPlane.GetNormal();
-
-            Point point1 = new Point(p1.X + thickness1 * vector.X, p1.Y + thickness1 * vector.Y, p1.Z + thickness1 * vector.Z);
-            fitting.Plane.Origin = point1;
-
-
-            fitting.Plane.AxisX = new Line(p2, p1).Direction;
-            fitting.Plane.AxisY = new Line(p1, p3).Direction;
-            fitting.Father = part1;
-            fitting.Insert();
+            fitting.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
+            fitting.Plane.AxisY = new Line(mid, point3).Direction;
+            
+            
+           
 
             Fitting fitting1 = new Fitting();
 
 
 
-            point1 = new Point(p1.X - thickness2 * vector.X, p1.Y - thickness2 * vector.Y, p1.Z - thickness2 * vector.Z);
-            fitting1.Plane.Origin = point1;
+            Point point2 = intersectionMidPoint - thickness2 * fittingPlain.GetNormal();
+            
 
 
-            fitting1.Plane.AxisX = new Line(p2, p1).Direction;
-            fitting1.Plane.AxisY = new Line(p1, p3).Direction;
+            fitting1.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
+            fitting1.Plane.AxisY = new Line(mid, point3).Direction;
             fitting1.Father = part2;
+            if (Distance.PointToPoint(point1, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)) < Distance.PointToPoint(point2, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)))
+            {
+                fitting.Plane.Origin = point1;
+                fitting1.Plane.Origin = point2;
+            }
+            else
+            {
+                fitting.Plane.Origin = point2;
+                fitting1.Plane.Origin = point1;
+            }
+            fitting.Insert();
             fitting1.Insert();
-            return geometricPlane;
+            return fittingPlain;
         }
-        private ArrayList Plates(Part part1, Part part2, double topHight, double middleHight, double bottomHight, double width, GeometricPlane geometricPlane, double thickness1, double thickness2)
+        private ArrayList Plates(Part part1, Part part2, double topHight, double middleHight, double bottomHight, double width, double thickness1, double thickness2)
         {
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
@@ -418,83 +434,82 @@ namespace Apex_haunch_connection
                 line2 = Intersection.PlaneToPlane(planeA1, planeB2),
                 line3 = Intersection.PlaneToPlane(planeA2, planeB1),
                 line4 = Intersection.PlaneToPlane(planeA2, planeB2);
-                if (intersection_CenterLine.StartPoint == intersection_CenterLine.EndPoint)
+
+                Point intersection = MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
+                double d1 = Distance.PointToPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point),
+                    d2 = Distance.PointToPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
+                Point p1, p2;
+                if (d1 > d2)
                 {
-                    Point intersection = intersection_CenterLine.StartPoint;
-                    double d1 = Distance.PointToPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point),
-                        d2 = Distance.PointToPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
-                    Point p1, p2;
-                    if (d1 > d2)
+                    if (Distance.PointToPoint(intersection, part1_centerLine[0] as Point) > Distance.PointToPoint(intersection, part1_centerLine[1] as Point))
                     {
-                        if (Distance.PointToPoint(intersection, part1_centerLine[0] as Point) > Distance.PointToPoint(intersection, part1_centerLine[1] as Point))
-                        {
-                            p1 = FindPointOnLine(part1_centerLine[0] as Point, part1_centerLine[1] as Point, d1 - d2);
-                        }
-                        else
-                            p1 = FindPointOnLine(part1_centerLine[1] as Point, part1_centerLine[0] as Point, d1 - d2);
-
-                        if (Distance.PointToPoint(intersection, part2_centerLine[0] as Point) > Distance.PointToPoint(intersection, part2_centerLine[1] as Point))
-                            p2 = part2_centerLine[0] as Point;
-                        else
-                            p2 = part2_centerLine[1] as Point;
-
-
+                        p1 = FindPointOnLine(part1_centerLine[0] as Point, part1_centerLine[1] as Point, d1 - d2);
                     }
                     else
-                    {
-                        if (Distance.PointToPoint(intersection, part2_centerLine[0] as Point) > Distance.PointToPoint(intersection, part2_centerLine[1] as Point))
-                        {
-                            p1 = FindPointOnLine(part2_centerLine[0] as Point, part2_centerLine[1] as Point, d2 - d1);
-                        }
-                        else
-                            p1 = FindPointOnLine(part2_centerLine[1] as Point, part2_centerLine[0] as Point, d2 - d1);
+                        p1 = FindPointOnLine(part1_centerLine[1] as Point, part1_centerLine[0] as Point, d1 - d2);
 
-                        if (Distance.PointToPoint(intersection, part1_centerLine[0] as Point) > Distance.PointToPoint(intersection, part1_centerLine[1] as Point))
-                            p2 = part1_centerLine[0] as Point;
-                        else
-                            p2 = part1_centerLine[1] as Point;
+                    if (Distance.PointToPoint(intersection, part2_centerLine[0] as Point) > Distance.PointToPoint(intersection, part2_centerLine[1] as Point))
+                        p2 = part2_centerLine[0] as Point;
+                    else
+                        p2 = part2_centerLine[1] as Point;
 
-                    }
-                    Point refference = MidPoint(p1, p2);
-                    double distance = Distance.PointToLine(refference, line1);
-                    Line holdLine = line1;
-                    foreach (Line line in new List<Line> { line2, line3, line4 })
-                    {
-                        if (Distance.PointToLine(refference, holdLine) < Distance.PointToLine(refference, line))
-                        {
-                            distance = Distance.PointToLine(refference, line);
-                            holdLine = line;
-                        }
-                    }
 
-                    p1 = Intersection.LineToPlane(holdLine, ConvertFaceToGeometricPlane(part1Faces[0].Face));
-                    p2 = Intersection.LineToPlane(holdLine, ConvertFaceToGeometricPlane(part1Faces[10].Face));
-                    Point top = GetClosestPointOnLineSegment(refference, p1, p2);
-
-                    Point startPoint = FindPointOnLine(top, refference, topHight * -1);
-                    double totalBottomdistance = middleHight + bottomHight;
-                    Point endPoint = FindPointOnLine(intersection, refference, totalBottomdistance);
-                    Beam beam1 = new Beam();
-                    beam1.StartPoint = startPoint;
-                    beam1.EndPoint = endPoint;
-                    beam1.Profile.ProfileString = "PLT" + thickness1 + "*" + width;
-                    beam1.Position.Depth = Position.DepthEnum.MIDDLE;
-                    beam1.Position.Plane = Position.PlaneEnum.RIGHT;
-                    beam1.Position.Rotation = Position.RotationEnum.TOP;
-                    beam1.Class = "1";
-                    beam1.Insert();
-                    Beam beam2 = new Beam();
-                    beam2.StartPoint = startPoint;
-                    beam2.EndPoint = endPoint;
-                    beam2.Profile.ProfileString = "PLT" + thickness2 + "*" + width;
-                    beam2.Position.Depth = Position.DepthEnum.MIDDLE;
-                    beam2.Position.Plane = Position.PlaneEnum.LEFT;
-                    beam2.Position.Rotation = Position.RotationEnum.TOP;
-                    beam2.Class = "1";
-                    beam2.Insert();
-                    return new ArrayList { beam1, beam2 };
                 }
+                else
+                {
+                    if (Distance.PointToPoint(intersection, part2_centerLine[0] as Point) > Distance.PointToPoint(intersection, part2_centerLine[1] as Point))
+                    {
+                        p1 = FindPointOnLine(part2_centerLine[0] as Point, part2_centerLine[1] as Point, d2 - d1);
+                    }
+                    else
+                        p1 = FindPointOnLine(part2_centerLine[1] as Point, part2_centerLine[0] as Point, d2 - d1);
+
+                    if (Distance.PointToPoint(intersection, part1_centerLine[0] as Point) > Distance.PointToPoint(intersection, part1_centerLine[1] as Point))
+                        p2 = part1_centerLine[0] as Point;
+                    else
+                        p2 = part1_centerLine[1] as Point;
+
+                }
+                Point refference = MidPoint(p1, p2);
+                double distance = Distance.PointToLine(refference, line1);
+                Line holdLine = line1;
+                foreach (Line line in new List<Line> { line2, line3, line4 })
+                {
+                    if (Distance.PointToLine(refference, holdLine) < Distance.PointToLine(refference, line))
+                    {
+                        distance = Distance.PointToLine(refference, line);
+                        holdLine = line;
+                    }
+                }
+
+                p1 = Intersection.LineToPlane(holdLine, ConvertFaceToGeometricPlane(part1Faces[0].Face));
+                p2 = Intersection.LineToPlane(holdLine, ConvertFaceToGeometricPlane(part1Faces[10].Face));
+                Point top = GetClosestPointOnLineSegment(refference, p1, p2);
+
+                Point startPoint = FindPointOnLine(top, refference, topHight * -1);
+                double totalBottomdistance = middleHight + bottomHight;
+                Point endPoint = FindPointOnLine(intersection, refference, totalBottomdistance);
+                Beam beam1 = new Beam();
+                beam1.StartPoint = startPoint;
+                beam1.EndPoint = endPoint;
+                beam1.Profile.ProfileString = "PLT" + thickness1 + "*" + width;
+                beam1.Position.Depth = Position.DepthEnum.MIDDLE;
+                beam1.Position.Plane = Position.PlaneEnum.RIGHT;
+                beam1.Position.Rotation = Position.RotationEnum.TOP;
+                beam1.Class = "1";
+                beam1.Insert();
+                Beam beam2 = new Beam();
+                beam2.StartPoint = startPoint;
+                beam2.EndPoint = endPoint;
+                beam2.Profile.ProfileString = "PLT" + thickness2 + "*" + width;
+                beam2.Position.Depth = Position.DepthEnum.MIDDLE;
+                beam2.Position.Plane = Position.PlaneEnum.LEFT;
+                beam2.Position.Rotation = Position.RotationEnum.TOP;
+                beam2.Class = "1";
+                beam2.Insert();
+                return new ArrayList { beam1, beam2 };
             }
+            
             return null;
         }
         private void boltArray(ArrayList parts, Part beam1, Part beam2)
@@ -566,7 +581,7 @@ namespace Apex_haunch_connection
                     }
                 }
             }
-            bA.StartPointOffset.Dx = _BA1OffsetX;
+            bA.StartPointOffset.Dx = 0;
             if (doubles != null)
                 doubles.Clear();
             doubles = InputConverter(_BA1yText);
@@ -597,7 +612,7 @@ namespace Apex_haunch_connection
                 }
             }
 
-            bA.StartPointOffset.Dy = _BA1OffsetY;
+            bA.StartPointOffset.Dy = 0;
 
             GeometricPlane gp1 = ConvertFaceToGeometricPlane(cp_faces[0].Face),
                gp2 = ConvertFaceToGeometricPlane(cp_faces[1].Face);
@@ -608,7 +623,7 @@ namespace Apex_haunch_connection
                 geometricPlane = gp2;
             Point mid = MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
             Beam beam = parts[0] as Beam;
-            Point point1 = FindPointOnLine(mid, beam.StartPoint, total / 2);
+            Point point1 = FindPointOnLine(mid, beam.StartPoint, total / 2+ _BA1OffsetX);
             bA.FirstPosition = FindClosestPointOnPlane(geometricPlane, point1);
             bA.SecondPosition = FindClosestPointOnPlane(geometricPlane, beam.EndPoint);
             bA.Insert();
