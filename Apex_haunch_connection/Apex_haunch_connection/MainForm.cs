@@ -74,7 +74,7 @@ namespace Apex_haunch_connection
 
         private void materialCatalog1_Load(object sender, EventArgs e)
         {
-            textBox10.v
+            
         }
     }
 }

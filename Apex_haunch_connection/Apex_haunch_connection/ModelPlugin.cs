@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Windows.Forms;
 
 using Tekla.Structures.Geometry3d;
@@ -205,7 +206,7 @@ namespace Apex_haunch_connection
                 Beam beam1 = myModel.SelectModelObject(Input[0].GetInput() as Identifier) as Beam;
                 Beam beam2 = myModel.SelectModelObject(Input[1].GetInput() as Identifier) as Beam;
                 GeometricPlane geometricPlane = Fitparts(beam1 as Part, beam2 as Part, _PlateThickness1, _PlateThickness2);
-                ArrayList plates = Plates(beam1, beam2, _PlateHightTop, _PlateHightMid, _PlateHightBottom, _PlateWidth,  _PlateThickness1, _PlateThickness2);
+                ArrayList plates = Plates(beam1, beam2, _PlateHightTop, _PlateHightMid, _PlateHightBottom, _PlateWidth,  _PlateThickness1, _PlateThickness2,geometricPlane);
                 boltArray(plates, beam1, beam2);
                 Hunch(beam1, beam2, plates, _PlateHightBottom, _HaunchWebThickness, _HaunchFlangeThickness, _HaunchWidth);
             }
@@ -376,25 +377,16 @@ namespace Apex_haunch_connection
             Point mid = MidPoint(p1, p2);
             Point point3 = mid + newplain.GetNormal() * 50;
             GeometricPlane fittingPlain = CreatePlaneFromThreePoints(intersectionMidPoint, mid, point3);
-
-            Fitting fitting = new Fitting();
-            Point point1 = intersectionMidPoint + thickness1*fittingPlain.GetNormal() ;
-            
-
-            fitting.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
-            fitting.Plane.AxisY = new Line(mid, point3).Direction;
-            
-            
-           
-
-            Fitting fitting1 = new Fitting();
-
-
-
+            Point point1 = intersectionMidPoint + thickness1 * fittingPlain.GetNormal();
             Point point2 = intersectionMidPoint - thickness2 * fittingPlain.GetNormal();
             
+            Fitting fitting = new Fitting();
+            fitting.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
+            fitting.Plane.AxisY = new Line(mid, point3).Direction;
+            fitting.Father = part1;
+            
 
-
+            Fitting fitting1 = new Fitting();
             fitting1.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
             fitting1.Plane.AxisY = new Line(mid, point3).Direction;
             fitting1.Father = part2;
@@ -412,83 +404,52 @@ namespace Apex_haunch_connection
             fitting1.Insert();
             return fittingPlain;
         }
-        private ArrayList Plates(Part part1, Part part2, double topHight, double middleHight, double bottomHight, double width, double thickness1, double thickness2)
+        private ArrayList Plates(Part part1, Part part2, double topHight, double middleHight, double bottomHight, double width, double thickness1, double thickness2, GeometricPlane geometricPlane)
         {
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
             LineSegment intersection_CenterLine = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
             List<Face_> part1Faces = get_faces(part1),
                 part2Faces = get_faces(part2);
+            LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
+            Point po1 = FindClosestPointOnPlane(geometricPlane, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)),
+                po2 = FindClosestPointOnPlane(geometricPlane, MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
 
-            if (intersection_CenterLine == null)
-                MessageBox.Show("Connection not posible");
-            else
+            Point refference = MidPoint(po1, po2);
+            GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
+               planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
+               planeB1 = ConvertFaceToGeometricPlane(part2Faces[5].Face),
+               planeB2 = ConvertFaceToGeometricPlane(part2Faces[11].Face),
+               g1 = ConvertFaceToGeometricPlane(part1Faces[0].Face),
+               g2 = ConvertFaceToGeometricPlane(part1Faces[10].Face);
+               
+
+            Line line1 = Intersection.PlaneToPlane(planeA1, geometricPlane),
+            line2 = Intersection.PlaneToPlane(planeA2, geometricPlane),
+            line3 = Intersection.PlaneToPlane(planeB1, geometricPlane),
+            line4 = Intersection.PlaneToPlane(planeB2, geometricPlane);
+            Point top = GetClosestPointOnLineSegment(refference, Intersection.LineToPlane(line1, g1), Intersection.LineToPlane(line1, g2));
+            double distance = Distance.PointToLine(refference, line1);
+            ControlLine controlLine = new ControlLine(new LineSegment(Intersection.LineToPlane(line1, g1), Intersection.LineToPlane(line1, g2)),false);
+            controlLine.Insert();
+            foreach (Line l in new List<Line> { line2, line3, line4 })
             {
+                ControlLine controlLine1 = new ControlLine(new LineSegment(Intersection.LineToPlane(l, g1), Intersection.LineToPlane(l, g2)), false);
+                controlLine1.Insert();
 
-                GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
-                planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
-                planeB1 = ConvertFaceToGeometricPlane(part2Faces[5].Face),
-                planeB2 = ConvertFaceToGeometricPlane(part2Faces[11].Face);
-
-                Line line1 = Intersection.PlaneToPlane(planeA1, planeB1),
-                line2 = Intersection.PlaneToPlane(planeA1, planeB2),
-                line3 = Intersection.PlaneToPlane(planeA2, planeB1),
-                line4 = Intersection.PlaneToPlane(planeA2, planeB2);
-
-                Point intersection = MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
-                double d1 = Distance.PointToPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point),
-                    d2 = Distance.PointToPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
-                Point p1, p2;
-                if (d1 > d2)
+                if (Distance.PointToLine(refference, l) > distance)
                 {
-                    if (Distance.PointToPoint(intersection, part1_centerLine[0] as Point) > Distance.PointToPoint(intersection, part1_centerLine[1] as Point))
-                    {
-                        p1 = FindPointOnLine(part1_centerLine[0] as Point, part1_centerLine[1] as Point, d1 - d2);
-                    }
-                    else
-                        p1 = FindPointOnLine(part1_centerLine[1] as Point, part1_centerLine[0] as Point, d1 - d2);
-
-                    if (Distance.PointToPoint(intersection, part2_centerLine[0] as Point) > Distance.PointToPoint(intersection, part2_centerLine[1] as Point))
-                        p2 = part2_centerLine[0] as Point;
-                    else
-                        p2 = part2_centerLine[1] as Point;
-
-
+                    top = GetClosestPointOnLineSegment(refference, Intersection.LineToPlane(l, g1), Intersection.LineToPlane(l, g2));
+                    distance = Distance.PointToLine(refference,l);
                 }
-                else
-                {
-                    if (Distance.PointToPoint(intersection, part2_centerLine[0] as Point) > Distance.PointToPoint(intersection, part2_centerLine[1] as Point))
-                    {
-                        p1 = FindPointOnLine(part2_centerLine[0] as Point, part2_centerLine[1] as Point, d2 - d1);
-                    }
-                    else
-                        p1 = FindPointOnLine(part2_centerLine[1] as Point, part2_centerLine[0] as Point, d2 - d1);
-
-                    if (Distance.PointToPoint(intersection, part1_centerLine[0] as Point) > Distance.PointToPoint(intersection, part1_centerLine[1] as Point))
-                        p2 = part1_centerLine[0] as Point;
-                    else
-                        p2 = part1_centerLine[1] as Point;
-
-                }
-                Point refference = MidPoint(p1, p2);
-                double distance = Distance.PointToLine(refference, line1);
-                Line holdLine = line1;
-                foreach (Line line in new List<Line> { line2, line3, line4 })
-                {
-                    if (Distance.PointToLine(refference, holdLine) < Distance.PointToLine(refference, line))
-                    {
-                        distance = Distance.PointToLine(refference, line);
-                        holdLine = line;
-                    }
-                }
-
-                p1 = Intersection.LineToPlane(holdLine, ConvertFaceToGeometricPlane(part1Faces[0].Face));
-                p2 = Intersection.LineToPlane(holdLine, ConvertFaceToGeometricPlane(part1Faces[10].Face));
-                Point top = GetClosestPointOnLineSegment(refference, p1, p2);
-
+            }
+            ControlPoint controlPoint = new ControlPoint(refference);
+            controlPoint.Insert();
+            Vector vector = geometricPlane.GetNormal();
+            
                 Point startPoint = FindPointOnLine(top, refference, topHight * -1);
                 double totalBottomdistance = middleHight + bottomHight;
-                Point endPoint = FindPointOnLine(intersection, refference, totalBottomdistance);
+                Point endPoint = FindPointOnLine(MidPoint(intersectLineSegment.Point1, intersectLineSegment.Point2), refference, totalBottomdistance);
                 Beam beam1 = new Beam();
                 beam1.StartPoint = startPoint;
                 beam1.EndPoint = endPoint;
@@ -508,9 +469,9 @@ namespace Apex_haunch_connection
                 beam2.Class = "1";
                 beam2.Insert();
                 return new ArrayList { beam1, beam2 };
-            }
             
-            return null;
+            
+           
         }
         private void boltArray(ArrayList parts, Part beam1, Part beam2)
         {
