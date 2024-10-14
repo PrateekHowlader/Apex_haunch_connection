@@ -205,10 +205,23 @@ namespace Apex_haunch_connection
 
                 Beam beam1 = myModel.SelectModelObject(Input[0].GetInput() as Identifier) as Beam;
                 Beam beam2 = myModel.SelectModelObject(Input[1].GetInput() as Identifier) as Beam;
+               
+               
+                Point origin1 = beam1.EndPoint;
+                var girtCoord = beam1.GetCoordinateSystem();
+                girtCoord.Origin = origin1;
+                //girtCoord.AxisX = girtCoord.AxisX *- 1;
+                
+                TransformationPlane currentTransformation = myModel.GetWorkPlaneHandler().GetCurrentTransformationPlane();
+                var newWorkPlane = new TransformationPlane(girtCoord);
+               // workPlaneHandler.SetCurrentTransformationPlane(newWorkPlane);
+                myModel.GetWorkPlaneHandler().SetCurrentTransformationPlane(newWorkPlane);
                 GeometricPlane geometricPlane = Fitparts(beam1 as Part, beam2 as Part, _PlateThickness1, _PlateThickness2);
-                ArrayList plates = Plates(beam1, beam2, _PlateHightTop, _PlateHightMid, _PlateHightBottom, _PlateWidth,  _PlateThickness1, _PlateThickness2,geometricPlane);
+                ArrayList plates = Plates(beam1, beam2, _PlateHightTop, _PlateHightMid, _PlateHightBottom, _PlateWidth, _PlateThickness1, _PlateThickness2, geometricPlane);
                 boltArray(plates, beam1, beam2);
                 Hunch(beam1, beam2, plates, _PlateHightBottom, _HaunchWebThickness, _HaunchFlangeThickness, _HaunchWidth);
+                //workPlaneHandler.SetCurrentTransformationPlane(currentTransformation);
+                myModel.GetWorkPlaneHandler().SetCurrentTransformationPlane(currentTransformation);
             }
             catch (Exception Exc)
             {
@@ -379,16 +392,16 @@ namespace Apex_haunch_connection
             GeometricPlane fittingPlain = CreatePlaneFromThreePoints(intersectionMidPoint, mid, point3);
             Point point1 = intersectionMidPoint + thickness1 * fittingPlain.GetNormal();
             Point point2 = intersectionMidPoint - thickness2 * fittingPlain.GetNormal();
-            
+            var plaine = ConvertGeometricPlaneToPlane(fittingPlain);
             Fitting fitting = new Fitting();
-            fitting.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
-            fitting.Plane.AxisY = new Line(mid, point3).Direction;
+            fitting.Plane.AxisX = plaine.AxisX;
+            fitting.Plane.AxisY = plaine.AxisY;
             fitting.Father = part1;
             
 
             Fitting fitting1 = new Fitting();
-            fitting1.Plane.AxisX = new Line(mid, intersectionMidPoint).Direction;
-            fitting1.Plane.AxisY = new Line(mid, point3).Direction;
+            fitting1.Plane.AxisX = plaine.AxisX;
+            fitting1.Plane.AxisY = plaine.AxisY;
             fitting1.Father = part2;
             if (Distance.PointToPoint(point1, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)) < Distance.PointToPoint(point2, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)))
             {
@@ -412,8 +425,8 @@ namespace Apex_haunch_connection
             List<Face_> part1Faces = get_faces(part1),
                 part2Faces = get_faces(part2);
             LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
-            Point po1 = FindClosestPointOnPlane(geometricPlane, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)),
-                po2 = FindClosestPointOnPlane(geometricPlane, MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
+            Point po1 = Projection.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point),geometricPlane),
+                po2 = Projection.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), geometricPlane);
 
             Point refference = MidPoint(po1, po2);
             GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
@@ -430,12 +443,10 @@ namespace Apex_haunch_connection
             line4 = Intersection.PlaneToPlane(planeB2, geometricPlane);
             Point top = GetClosestPointOnLineSegment(refference, Intersection.LineToPlane(line1, g1), Intersection.LineToPlane(line1, g2));
             double distance = Distance.PointToLine(refference, line1);
-            ControlLine controlLine = new ControlLine(new LineSegment(Intersection.LineToPlane(line1, g1), Intersection.LineToPlane(line1, g2)),false);
-            controlLine.Insert();
+            
             foreach (Line l in new List<Line> { line2, line3, line4 })
             {
-                ControlLine controlLine1 = new ControlLine(new LineSegment(Intersection.LineToPlane(l, g1), Intersection.LineToPlane(l, g2)), false);
-                controlLine1.Insert();
+                
 
                 if (Distance.PointToLine(refference, l) > distance)
                 {
@@ -443,8 +454,7 @@ namespace Apex_haunch_connection
                     distance = Distance.PointToLine(refference,l);
                 }
             }
-            ControlPoint controlPoint = new ControlPoint(refference);
-            controlPoint.Insert();
+            
             Vector vector = geometricPlane.GetNormal();
             
                 Point startPoint = FindPointOnLine(top, refference, topHight * -1);
@@ -585,8 +595,8 @@ namespace Apex_haunch_connection
             Point mid = MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
             Beam beam = parts[0] as Beam;
             Point point1 = FindPointOnLine(mid, beam.StartPoint, total / 2+ _BA1OffsetX);
-            bA.FirstPosition = FindClosestPointOnPlane(geometricPlane, point1);
-            bA.SecondPosition = FindClosestPointOnPlane(geometricPlane, beam.EndPoint);
+            bA.FirstPosition = Projection.PointToPlane(point1, geometricPlane);
+            bA.SecondPosition = Projection.PointToPlane(beam.EndPoint, geometricPlane);
             bA.Insert();
         }
         private void Hunch(Part part1, Part part2, ArrayList plates, double bottom_length, double webThickness, double flangeThickness, double width)
@@ -602,20 +612,33 @@ namespace Apex_haunch_connection
             List<Face_> plate1_faces = face_s.OrderByDescending(fa => CalculateFaceArea(fa)).ToList();
             face_s = get_faces(plates[1] as Beam);
             List<Face_> plate2_faces = face_s.OrderByDescending(fa => CalculateFaceArea(fa)).ToList();
-            Face_ plate1Closest = null, plate2Closest = null;
-            if (Distance.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), ConvertFaceToGeometricPlane(plate1_faces[0].Face)) < Distance.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), ConvertFaceToGeometricPlane(plate1_faces[1].Face)))
+            GeometricPlane plate1Closest = null, plate2Closest = null;
+            
+            GeometricPlane plA1 = ConvertFaceToGeometricPlane(plate1_faces[0].Face),
+                plA2 = ConvertFaceToGeometricPlane(plate1_faces[1].Face),
+                plB1 = ConvertFaceToGeometricPlane(plate2_faces[0].Face),
+                plB2 = ConvertFaceToGeometricPlane(plate2_faces[1].Face);
+            double d = 0;
+            foreach (GeometricPlane gp in new List<GeometricPlane> { plA1, plA2, plB1, plB2 })
             {
-                plate1Closest = plate1_faces[0];
+                if (d < Distance.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), gp))
+                {
+                    d = Distance.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), gp);
+                    plate2Closest = gp;
+                }
             }
-            else
-                plate1Closest = plate1_faces[1];
-
-            if (Distance.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), ConvertFaceToGeometricPlane(plate2_faces[0].Face)) < Distance.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), ConvertFaceToGeometricPlane(plate2_faces[1].Face)))
+            d=0;
+            foreach (GeometricPlane gp in new List<GeometricPlane> { plA1, plA2, plB1, plB2 })
             {
-                plate2Closest = plate2_faces[0];
+                if (d < Distance.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), gp))
+                {
+                    d = Distance.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), gp);
+                    plate1Closest = gp;
+                }
             }
-            else
-                plate2Closest = plate2_faces[1];
+            
+           
+           
 
             GeometricPlane part1FaceColsest = null, part2FaceClosest = null;
             if (Distance.PointToPlane(plate1.EndPoint, ConvertFaceToGeometricPlane(part1Faces[5].Face)) < Distance.PointToPlane(plate1.EndPoint, ConvertFaceToGeometricPlane(part1Faces[11].Face)))
@@ -628,10 +651,10 @@ namespace Apex_haunch_connection
             else
                 part2FaceClosest = ConvertFaceToGeometricPlane(part2Faces[11].Face);
 
-            Point holdStart = FindClosestPointOnPlane(ConvertFaceToGeometricPlane(plate1Closest.Face), plate1.StartPoint), holdEnd = FindClosestPointOnPlane(ConvertFaceToGeometricPlane(plate1Closest.Face), plate1.EndPoint);
+            Point holdStart = Projection.PointToPlane(plate1.StartPoint,plate1Closest ), holdEnd = Projection.PointToPlane(plate1.EndPoint, plate1Closest);
             Point pA1 = Intersection.LineToPlane(new Line(holdStart, holdEnd), part1FaceColsest);
             Point pA2 = FindPointOnLine(holdEnd, holdStart, bottom_length + flangeThickness);
-            Line holdLine = new Line(pA2, plate1Closest.Vector);
+            Line holdLine = new Line(pA2, plate1Closest.GetNormal());
             Point pA3 = Intersection.LineToPlane(holdLine, part1FaceColsest);
 
             ContourPlate cp1 = new ContourPlate();
@@ -652,10 +675,10 @@ namespace Apex_haunch_connection
             cp1.Position.Depth = Position.DepthEnum.MIDDLE;
             cp1.Insert();
 
-            holdStart = FindClosestPointOnPlane(ConvertFaceToGeometricPlane(plate2Closest.Face), plate2.StartPoint); holdEnd = FindClosestPointOnPlane(ConvertFaceToGeometricPlane(plate2Closest.Face), plate2.EndPoint);
+            holdStart = Projection.PointToPlane(plate2.StartPoint,plate2Closest); holdEnd = Projection.PointToPlane(plate2.EndPoint, plate2Closest);
             Point pB1 = Intersection.LineToPlane(new Line(holdStart, holdEnd), part2FaceClosest);
             Point pB2 = FindPointOnLine(holdEnd, holdStart, bottom_length + flangeThickness);
-            holdLine = new Line(pA2, plate1Closest.Vector);
+            holdLine = new Line(pA2, plate1Closest.GetNormal());
             Point pB3 = Intersection.LineToPlane(holdLine, part2FaceClosest);
 
             ContourPlate cp2 = new ContourPlate();
@@ -679,9 +702,11 @@ namespace Apex_haunch_connection
             Beam flange1 = new Beam();
             flange1.StartPoint = pA2;
             flange1.EndPoint = pA3;
+            Vector vector1 = new Line(pA2, pA3).Direction;
+            vector1.Normalize();
             flange1.Profile.ProfileString = "PLT" + flangeThickness + "*" + width;
             flange1.Position.Depth = Position.DepthEnum.MIDDLE;
-            flange1.Position.Plane = PlaneEnum.LEFT;
+            flange1.Position.Plane =(vector1.X > 0 && vector1.Y > 0)? PlaneEnum.RIGHT : PlaneEnum.LEFT;
             flange1.Position.Rotation = Position.RotationEnum.TOP;
             flange1.Class = "1";
             flange1.Insert();
@@ -689,12 +714,34 @@ namespace Apex_haunch_connection
             Beam flange2 = new Beam();
             flange2.StartPoint = pB2;
             flange2.EndPoint = pB3;
+            Vector vector2 = new Line(pB2, pB3).Direction;
+            vector2.Normalize();
             flange2.Profile.ProfileString = "PLT" + flangeThickness + "*" + width;
             flange2.Position.Depth = Position.DepthEnum.MIDDLE;
-            flange2.Position.Plane = PlaneEnum.RIGHT;
+            flange2.Position.Plane = (vector1.X > 0 && vector1.Y > 0) ? PlaneEnum.LEFT : PlaneEnum.RIGHT;
             flange2.Position.Rotation = Position.RotationEnum.TOP;
             flange2.Class = "1";
             flange2.Insert();
+
+            WeldArray(cp1, new ArrayList { part1, plates[0], flange1 });
+            WeldArray(cp2, new ArrayList { part2, plates[1], flange2 });
+        }
+        private void WeldArray(Part part1 , ArrayList arrayList)
+        {
+            foreach (Part part2 in arrayList)
+            {
+                Weld Weld = new Weld();
+                Weld.MainObject = part1;
+                Weld.SecondaryObject = part2;
+                Weld.TypeAbove = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+
+                Weld.Insert();
+
+                Weld.LengthAbove = 12;
+                Weld.TypeBelow = BaseWeld.WeldTypeEnum.WELD_TYPE_SLOT;
+
+                Weld.Modify();
+            }
         }
         class Face_
         {
@@ -956,25 +1003,24 @@ namespace Apex_haunch_connection
             double area = 0.5 * crossProduct.GetLength();
             return area;
         }
-        private static Point FindClosestPointOnPlane(GeometricPlane plane, Point point)
+        
+        public static Tekla.Structures.Model. Plane ConvertGeometricPlaneToPlane(GeometricPlane geometricPlane)
         {
-            // Step 1: Get the normal vector of the plane
-            Vector normalVector = plane.Normal;
+            // Extract the point on the plane
+            Point origin = geometricPlane.Origin;
 
-            // Step 2: Find a vector from the plane's origin to the given point
-            Vector pointToPlaneVector = new Vector(point.X - plane.Origin.X, point.Y - plane.Origin.Y, point.Z - plane.Origin.Z);
+            // Extract the normal vector of the plane
+            Vector normal = geometricPlane.Normal;
 
-            // Step 3: Project the pointToPlaneVector onto the plane's normal vector
-            double distanceFromPointToPlane = pointToPlaneVector.Dot(normalVector); // Dot product to find projection length along the normal
+            // Create a new Plane using the origin and normal vector
+            Tekla.Structures.Model.Plane plane = new Tekla.Structures.Model.Plane();
+            plane.Origin = origin;
+            plane.AxisX = normal.Cross(new Vector(0, 0, 1)); // X-axis direction (perpendicular to Z-axis)
+            plane.AxisY = normal.Cross(plane.AxisX);         // Y-axis direction
+            plane.AxisX.Normalize();
+            plane.AxisY.Normalize();
 
-            // Step 4: Calculate the closest point by moving from the point in the opposite direction of the normal by the distance
-            Point closestPoint = new Point(
-                point.X - distanceFromPointToPlane * normalVector.X,
-                point.Y - distanceFromPointToPlane * normalVector.Y,
-                point.Z - distanceFromPointToPlane * normalVector.Z
-            );
-
-            return closestPoint;
+            return plane;
         }
         #endregion
     }

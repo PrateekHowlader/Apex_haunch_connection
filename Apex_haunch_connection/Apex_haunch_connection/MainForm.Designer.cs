@@ -33,8 +33,6 @@ namespace Apex_haunch_connection
             this.OkApplyModifyGetOnOffCancel = new Tekla.Structures.Dialog.UIControls.OkApplyModifyGetOnOffCancel();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.ParametersTabPage = new System.Windows.Forms.TabPage();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -71,6 +69,9 @@ namespace Apex_haunch_connection
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.materialCatalog1 = new Tekla.Structures.Dialog.UIControls.MaterialCatalog();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
@@ -85,9 +86,6 @@ namespace Apex_haunch_connection
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.saveLoad = new Tekla.Structures.Dialog.UIControls.SaveLoad();
-            this.materialCatalog1 = new Tekla.Structures.Dialog.UIControls.MaterialCatalog();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.ParametersTabPage.SuspendLayout();
@@ -165,8 +163,6 @@ namespace Apex_haunch_connection
             this.structuresExtender.SetAttributeName(this.ParametersTabPage, null);
             this.structuresExtender.SetAttributeTypeName(this.ParametersTabPage, null);
             this.structuresExtender.SetBindPropertyName(this.ParametersTabPage, null);
-            this.ParametersTabPage.Controls.Add(this.textBox3);
-            this.ParametersTabPage.Controls.Add(this.label3);
             this.ParametersTabPage.Controls.Add(this.textBox5);
             this.ParametersTabPage.Controls.Add(this.textBox2);
             this.ParametersTabPage.Controls.Add(this.textBox1);
@@ -179,28 +175,6 @@ namespace Apex_haunch_connection
             this.ParametersTabPage.TabIndex = 2;
             this.ParametersTabPage.Text = "Parameters";
             this.ParametersTabPage.UseVisualStyleBackColor = true;
-            // 
-            // textBox3
-            // 
-            this.structuresExtender.SetAttributeName(this.textBox3, "PlateWidth");
-            this.structuresExtender.SetAttributeTypeName(this.textBox3, "Double");
-            this.structuresExtender.SetBindPropertyName(this.textBox3, null);
-            this.textBox3.Location = new System.Drawing.Point(477, 89);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 22);
-            this.textBox3.TabIndex = 13;
-            // 
-            // label3
-            // 
-            this.structuresExtender.SetAttributeName(this.label3, null);
-            this.structuresExtender.SetAttributeTypeName(this.label3, null);
-            this.label3.AutoSize = true;
-            this.structuresExtender.SetBindPropertyName(this.label3, null);
-            this.label3.Location = new System.Drawing.Point(474, 70);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 16);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Plate Width";
             // 
             // textBox5
             // 
@@ -669,6 +643,43 @@ namespace Apex_haunch_connection
             this.tabPage2.Text = "Plates";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label7
+            // 
+            this.structuresExtender.SetAttributeName(this.label7, null);
+            this.structuresExtender.SetAttributeTypeName(this.label7, null);
+            this.label7.AutoSize = true;
+            this.structuresExtender.SetBindPropertyName(this.label7, null);
+            this.label7.Location = new System.Drawing.Point(373, 203);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(55, 16);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Material";
+            // 
+            // textBox10
+            // 
+            this.structuresExtender.SetAttributeName(this.textBox10, "Material");
+            this.structuresExtender.SetAttributeTypeName(this.textBox10, "Double");
+            this.structuresExtender.SetBindPropertyName(this.textBox10, null);
+            this.textBox10.Location = new System.Drawing.Point(376, 222);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(100, 22);
+            this.textBox10.TabIndex = 6;
+            // 
+            // materialCatalog1
+            // 
+            this.structuresExtender.SetAttributeName(this.materialCatalog1, null);
+            this.structuresExtender.SetAttributeTypeName(this.materialCatalog1, null);
+            this.materialCatalog1.BackColor = System.Drawing.Color.Transparent;
+            this.structuresExtender.SetBindPropertyName(this.materialCatalog1, null);
+            this.materialCatalog1.ButtonText = "albl_Select__";
+            this.materialCatalog1.Location = new System.Drawing.Point(483, 222);
+            this.materialCatalog1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.materialCatalog1.Name = "materialCatalog1";
+            this.materialCatalog1.SelectedMaterial = "";
+            this.materialCatalog1.Size = new System.Drawing.Size(60, 22);
+            this.materialCatalog1.TabIndex = 5;
+            this.materialCatalog1.Load += new System.EventHandler(this.materialCatalog1_Load);
+            // 
             // label2
             // 
             this.structuresExtender.SetAttributeName(this.label2, null);
@@ -840,43 +851,6 @@ namespace Apex_haunch_connection
             this.saveLoad.TabIndex = 0;
             this.saveLoad.UserDefinedHelpFilePath = null;
             // 
-            // materialCatalog1
-            // 
-            this.structuresExtender.SetAttributeName(this.materialCatalog1, null);
-            this.structuresExtender.SetAttributeTypeName(this.materialCatalog1, null);
-            this.materialCatalog1.BackColor = System.Drawing.Color.Transparent;
-            this.structuresExtender.SetBindPropertyName(this.materialCatalog1, null);
-            this.materialCatalog1.ButtonText = "albl_Select__";
-            this.materialCatalog1.Location = new System.Drawing.Point(483, 222);
-            this.materialCatalog1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.materialCatalog1.Name = "materialCatalog1";
-            this.materialCatalog1.SelectedMaterial = "";
-            this.materialCatalog1.Size = new System.Drawing.Size(60, 22);
-            this.materialCatalog1.TabIndex = 5;
-            this.materialCatalog1.Load += new System.EventHandler(this.materialCatalog1_Load);
-            // 
-            // label7
-            // 
-            this.structuresExtender.SetAttributeName(this.label7, null);
-            this.structuresExtender.SetAttributeTypeName(this.label7, null);
-            this.label7.AutoSize = true;
-            this.structuresExtender.SetBindPropertyName(this.label7, null);
-            this.label7.Location = new System.Drawing.Point(373, 203);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(55, 16);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "Material";
-            // 
-            // textBox10
-            // 
-            this.structuresExtender.SetAttributeName(this.textBox10, "Material");
-            this.structuresExtender.SetAttributeTypeName(this.textBox10, "Double");
-            this.structuresExtender.SetBindPropertyName(this.textBox10, null);
-            this.textBox10.Location = new System.Drawing.Point(376, 222);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(100, 22);
-            this.textBox10.TabIndex = 6;
-            // 
             // MainForm
             // 
             this.structuresExtender.SetAttributeName(this, null);
@@ -928,8 +902,6 @@ namespace Apex_haunch_connection
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
