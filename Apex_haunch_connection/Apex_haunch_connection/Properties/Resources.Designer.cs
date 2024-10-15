@@ -93,6 +93,36 @@ namespace Apex_haunch_connection.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Screenshot_2024_10_15_104038 {
+            get {
+                object obj = ResourceManager.GetObject("Screenshot 2024-10-15 104038", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Screenshot_2024_10_15_1040381 {
+            get {
+                object obj = ResourceManager.GetObject("Screenshot 2024-10-15 1040381", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Screenshot_2024_10_15_105153 {
+            get {
+                object obj = ResourceManager.GetObject("Screenshot 2024-10-15 105153", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Screenshot1_2024_09_20_125210 {
             get {
                 object obj = ResourceManager.GetObject("Screenshot1 2024-09-20 125210", resourceCulture);
