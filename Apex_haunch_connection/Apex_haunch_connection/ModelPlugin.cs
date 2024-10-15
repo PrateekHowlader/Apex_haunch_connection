@@ -366,42 +366,27 @@ namespace Apex_haunch_connection
             List<Face_> part1_Face = get_faces(part1);
             List<Face_> part2_Face = get_faces(part2);
             ArrayList part1_centerLine = part1.GetCenterLine(false);
+            Point part1mid = MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
+            Point part2mid = MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
 
             LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
             Point intersectionMidPoint = MidPoint(intersectLineSegment.StartPoint, intersectLineSegment.EndPoint);
-            double d1 = Distance.PointToPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point),
-                d2 = Distance.PointToPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
+            double d1 = Distance.PointToPoint(intersectionMidPoint, part1mid),
+                d2 = Distance.PointToPoint(intersectionMidPoint, part2mid);
             Point p1, p2;
             if (d1 > d2)
             {
-                if (Distance.PointToPoint(intersectionMidPoint, part1_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part1_centerLine[1] as Point))
-                {
-                    p1 = FindPointOnLine(part1_centerLine[0] as Point, part1_centerLine[1] as Point, d1 - d2);
-                }
-                else
-                    p1 = FindPointOnLine(part1_centerLine[1] as Point, part1_centerLine[0] as Point, d1 - d2);
+                p2 = part2mid;
 
-                if (Distance.PointToPoint(intersectionMidPoint, part2_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part2_centerLine[1] as Point))
-                    p2 = part2_centerLine[0] as Point;
-                else
-                    p2 = part2_centerLine[1] as Point;
+                p1 = FindPointOnLine(intersectionMidPoint, part1mid, d2);
 
 
             }
             else
             {
-                if (Distance.PointToPoint(intersectionMidPoint, part2_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part2_centerLine[1] as Point))
-                {
-                    p1 = FindPointOnLine(part2_centerLine[0] as Point, part2_centerLine[1] as Point, d2 - d1);
-                }
-                else
-                    p1 = FindPointOnLine(part2_centerLine[1] as Point, part2_centerLine[0] as Point, d2 - d1);
-
-                if (Distance.PointToPoint(intersectionMidPoint, part1_centerLine[0] as Point) > Distance.PointToPoint(intersectionMidPoint, part1_centerLine[1] as Point))
-                    p2 = part1_centerLine[0] as Point;
-                else
-                    p2 = part1_centerLine[1] as Point;
+                p1 = part1mid;
+                p2 = FindPointOnLine(intersectionMidPoint, part2mid, d1);
 
             }
             GeometricPlane newplain = CreatePlaneFromThreePoints(intersectionMidPoint, p1, p2);
@@ -754,14 +739,48 @@ namespace Apex_haunch_connection
                 Weld.MainObject = part1;
                 Weld.SecondaryObject = part2;
                 Weld.TypeAbove = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
-
+                Weld.SizeAbove = 5;
+                Weld.SizeBelow = 5;
+                
+                Weld.LengthAbove = 12;
+                Weld.TypeBelow = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
                 Weld.Insert();
 
-                Weld.LengthAbove = 12;
-                Weld.TypeBelow = BaseWeld.WeldTypeEnum.WELD_TYPE_SLOT;
-
-                Weld.Modify();
+                
             }
+            Weld Weld1 = new Weld();
+            Weld1.MainObject = arrayList[0] as Part;
+            Weld1.SecondaryObject = arrayList[1] as Part;
+            Weld1.TypeAbove = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+            Weld1.SizeAbove = 5;
+            Weld1.SizeBelow = 5;
+
+            Weld1.LengthAbove = 12;
+            Weld1.TypeBelow = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+            Weld1.Insert();
+
+            Weld1 = new Weld();
+            Weld1.MainObject = arrayList[2] as Part;
+            Weld1.SecondaryObject = arrayList[1] as Part;
+            Weld1.TypeAbove = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+            Weld1.SizeAbove = 5;
+            Weld1.SizeBelow = 5;
+
+            Weld1.LengthAbove = 12;
+            Weld1.TypeBelow = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+            Weld1.Insert();
+
+            Weld1 = new Weld();
+            Weld1.MainObject = arrayList[0] as Part;
+            Weld1.SecondaryObject = arrayList[2] as Part;
+            Weld1.TypeAbove = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+            Weld1.SizeAbove = 5;
+            Weld1.SizeBelow = 5;
+
+            Weld1.LengthAbove = 12;
+            Weld1.TypeBelow = BaseWeld.WeldTypeEnum.WELD_TYPE_FILLET;
+            Weld1.Insert();
+
         }
         class Face_
         {
