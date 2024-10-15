@@ -37,7 +37,11 @@ namespace Apex_haunch_connection
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label24 = new System.Windows.Forms.Label();
             this.textBox21 = new System.Windows.Forms.TextBox();
             this.textBox19 = new System.Windows.Forms.TextBox();
@@ -66,6 +70,7 @@ namespace Apex_haunch_connection
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
             this.textBox10 = new System.Windows.Forms.TextBox();
@@ -74,6 +79,7 @@ namespace Apex_haunch_connection
             this.label1 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -81,27 +87,21 @@ namespace Apex_haunch_connection
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.saveLoad = new Tekla.Structures.Dialog.UIControls.SaveLoad();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.ParametersTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.SuspendLayout();
             // 
@@ -210,6 +210,18 @@ namespace Apex_haunch_connection
             this.textBox1.Size = new System.Drawing.Size(100, 22);
             this.textBox1.TabIndex = 9;
             // 
+            // pictureBox1
+            // 
+            this.structuresExtender.SetAttributeName(this.pictureBox1, null);
+            this.structuresExtender.SetAttributeTypeName(this.pictureBox1, null);
+            this.structuresExtender.SetBindPropertyName(this.pictureBox1, null);
+            this.pictureBox1.Image = global::Apex_haunch_connection.Properties.Resources.Screenshot_2024_10_15_105153;
+            this.pictureBox1.Location = new System.Drawing.Point(202, 82);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(264, 232);
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
+            // 
             // tabPage1
             // 
             this.structuresExtender.SetAttributeName(this.tabPage1, null);
@@ -233,6 +245,40 @@ namespace Apex_haunch_connection
             this.tabPage1.Text = "Bolt";
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // label3
+            // 
+            this.structuresExtender.SetAttributeName(this.label3, null);
+            this.structuresExtender.SetAttributeTypeName(this.label3, null);
+            this.label3.AutoSize = true;
+            this.structuresExtender.SetBindPropertyName(this.label3, null);
+            this.label3.Location = new System.Drawing.Point(523, 322);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(176, 16);
+            this.label3.TabIndex = 91;
+            this.label3.Text = "Horizontal Offset from center ";
+            // 
+            // textBox8
+            // 
+            this.structuresExtender.SetAttributeName(this.textBox8, "BA1OffsetY");
+            this.structuresExtender.SetAttributeTypeName(this.textBox8, "Distance");
+            this.structuresExtender.SetBindPropertyName(this.textBox8, null);
+            this.textBox8.Location = new System.Drawing.Point(526, 341);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(84, 22);
+            this.textBox8.TabIndex = 90;
+            // 
+            // pictureBox5
+            // 
+            this.structuresExtender.SetAttributeName(this.pictureBox5, null);
+            this.structuresExtender.SetAttributeTypeName(this.pictureBox5, null);
+            this.pictureBox5.BackgroundImage = global::Apex_haunch_connection.Properties.Resources._0f9f2c4ac314569afbfb8ab4ee9198bf_XL_cleanup;
+            this.structuresExtender.SetBindPropertyName(this.pictureBox5, null);
+            this.pictureBox5.Location = new System.Drawing.Point(200, 289);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(144, 207);
+            this.pictureBox5.TabIndex = 89;
+            this.pictureBox5.TabStop = false;
             // 
             // label24
             // 
@@ -269,7 +315,7 @@ namespace Apex_haunch_connection
             // textBox20
             // 
             this.structuresExtender.SetAttributeName(this.textBox20, "BA1xText");
-            this.structuresExtender.SetAttributeTypeName(this.textBox20, "String");
+            this.structuresExtender.SetAttributeTypeName(this.textBox20, "DistanceList");
             this.structuresExtender.SetBindPropertyName(this.textBox20, null);
             this.textBox20.Location = new System.Drawing.Point(72, 403);
             this.textBox20.Name = "textBox20";
@@ -289,7 +335,7 @@ namespace Apex_haunch_connection
             // textBox13
             // 
             this.structuresExtender.SetAttributeName(this.textBox13, "BA1yText");
-            this.structuresExtender.SetAttributeTypeName(this.textBox13, "String");
+            this.structuresExtender.SetAttributeTypeName(this.textBox13, "DistanceList");
             this.structuresExtender.SetBindPropertyName(this.textBox13, null);
             this.textBox13.Location = new System.Drawing.Point(234, 261);
             this.textBox13.Name = "textBox13";
@@ -593,6 +639,18 @@ namespace Apex_haunch_connection
             this.comboBox5.TabIndex = 57;
             this.comboBox5.Text = "Bolt";
             // 
+            // pictureBox3
+            // 
+            this.structuresExtender.SetAttributeName(this.pictureBox3, null);
+            this.structuresExtender.SetAttributeTypeName(this.pictureBox3, null);
+            this.pictureBox3.BackgroundImage = global::Apex_haunch_connection.Properties.Resources.Screenshot_2024_08_23_133010;
+            this.structuresExtender.SetBindPropertyName(this.pictureBox3, null);
+            this.pictureBox3.Location = new System.Drawing.Point(16, 35);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(125, 158);
+            this.pictureBox3.TabIndex = 48;
+            this.pictureBox3.TabStop = false;
+            // 
             // tabPage2
             // 
             this.structuresExtender.SetAttributeName(this.tabPage2, null);
@@ -696,6 +754,18 @@ namespace Apex_haunch_connection
             this.textBox6.Size = new System.Drawing.Size(100, 22);
             this.textBox6.TabIndex = 1;
             // 
+            // pictureBox2
+            // 
+            this.structuresExtender.SetAttributeName(this.pictureBox2, null);
+            this.structuresExtender.SetAttributeTypeName(this.pictureBox2, null);
+            this.pictureBox2.BackgroundImage = global::Apex_haunch_connection.Properties.Resources.Screenshot_2024_10_15_1040381;
+            this.structuresExtender.SetBindPropertyName(this.pictureBox2, null);
+            this.pictureBox2.Location = new System.Drawing.Point(16, 106);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(354, 288);
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            // 
             // tabPage3
             // 
             this.structuresExtender.SetAttributeName(this.tabPage3, null);
@@ -781,6 +851,18 @@ namespace Apex_haunch_connection
             this.textBox4.Size = new System.Drawing.Size(100, 22);
             this.textBox4.TabIndex = 8;
             // 
+            // pictureBox4
+            // 
+            this.structuresExtender.SetAttributeName(this.pictureBox4, null);
+            this.structuresExtender.SetAttributeTypeName(this.pictureBox4, null);
+            this.pictureBox4.BackgroundImage = global::Apex_haunch_connection.Properties.Resources.Screenshot1_2024_09_20_125210;
+            this.structuresExtender.SetBindPropertyName(this.pictureBox4, null);
+            this.pictureBox4.Location = new System.Drawing.Point(154, 152);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(200, 161);
+            this.pictureBox4.TabIndex = 7;
+            this.pictureBox4.TabStop = false;
+            // 
             // saveLoad
             // 
             this.structuresExtender.SetAttributeName(this.saveLoad, null);
@@ -808,88 +890,6 @@ namespace Apex_haunch_connection
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // pictureBox1
-            // 
-            this.structuresExtender.SetAttributeName(this.pictureBox1, null);
-            this.structuresExtender.SetAttributeTypeName(this.pictureBox1, null);
-            this.structuresExtender.SetBindPropertyName(this.pictureBox1, null);
-            this.pictureBox1.Image = global::Apex_haunch_connection.Properties.Resources.Screenshot_2024_10_15_105153;
-            this.pictureBox1.Location = new System.Drawing.Point(202, 82);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(264, 232);
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox5
-            // 
-            this.structuresExtender.SetAttributeName(this.pictureBox5, null);
-            this.structuresExtender.SetAttributeTypeName(this.pictureBox5, null);
-            this.pictureBox5.BackgroundImage = global::Apex_haunch_connection.Properties.Resources._0f9f2c4ac314569afbfb8ab4ee9198bf_XL_cleanup;
-            this.structuresExtender.SetBindPropertyName(this.pictureBox5, null);
-            this.pictureBox5.Location = new System.Drawing.Point(200, 289);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(144, 207);
-            this.pictureBox5.TabIndex = 89;
-            this.pictureBox5.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.structuresExtender.SetAttributeName(this.pictureBox3, null);
-            this.structuresExtender.SetAttributeTypeName(this.pictureBox3, null);
-            this.pictureBox3.BackgroundImage = global::Apex_haunch_connection.Properties.Resources.Screenshot_2024_08_23_133010;
-            this.structuresExtender.SetBindPropertyName(this.pictureBox3, null);
-            this.pictureBox3.Location = new System.Drawing.Point(16, 35);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(125, 158);
-            this.pictureBox3.TabIndex = 48;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.structuresExtender.SetAttributeName(this.pictureBox2, null);
-            this.structuresExtender.SetAttributeTypeName(this.pictureBox2, null);
-            this.pictureBox2.BackgroundImage = global::Apex_haunch_connection.Properties.Resources.Screenshot_2024_10_15_1040381;
-            this.structuresExtender.SetBindPropertyName(this.pictureBox2, null);
-            this.pictureBox2.Location = new System.Drawing.Point(16, 106);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(354, 288);
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.structuresExtender.SetAttributeName(this.pictureBox4, null);
-            this.structuresExtender.SetAttributeTypeName(this.pictureBox4, null);
-            this.pictureBox4.BackgroundImage = global::Apex_haunch_connection.Properties.Resources.Screenshot1_2024_09_20_125210;
-            this.structuresExtender.SetBindPropertyName(this.pictureBox4, null);
-            this.pictureBox4.Location = new System.Drawing.Point(154, 152);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(200, 161);
-            this.pictureBox4.TabIndex = 7;
-            this.pictureBox4.TabStop = false;
-            // 
-            // label3
-            // 
-            this.structuresExtender.SetAttributeName(this.label3, null);
-            this.structuresExtender.SetAttributeTypeName(this.label3, null);
-            this.label3.AutoSize = true;
-            this.structuresExtender.SetBindPropertyName(this.label3, null);
-            this.label3.Location = new System.Drawing.Point(523, 322);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(176, 16);
-            this.label3.TabIndex = 91;
-            this.label3.Text = "Horizontal Offset from center ";
-            // 
-            // textBox8
-            // 
-            this.structuresExtender.SetAttributeName(this.textBox8, "BA1OffsetY");
-            this.structuresExtender.SetAttributeTypeName(this.textBox8, "Distance");
-            this.structuresExtender.SetBindPropertyName(this.textBox8, null);
-            this.textBox8.Location = new System.Drawing.Point(526, 341);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(84, 22);
-            this.textBox8.TabIndex = 90;
-            // 
             // MainForm
             // 
             this.structuresExtender.SetAttributeName(this, null);
@@ -908,20 +908,20 @@ namespace Apex_haunch_connection
             this.tabControl.ResumeLayout(false);
             this.ParametersTabPage.ResumeLayout(false);
             this.ParametersTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
 

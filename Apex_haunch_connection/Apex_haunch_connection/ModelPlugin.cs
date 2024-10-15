@@ -156,7 +156,7 @@ namespace Apex_haunch_connection
             "HSFG-XOX",
             "UNDEFINED_BOLT",
             "UNDEFINED_STUD"
-            };
+        };
 
         private List<double> _BoltSizeEnum = new List<double>
         {
