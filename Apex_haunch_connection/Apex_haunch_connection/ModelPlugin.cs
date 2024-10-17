@@ -363,8 +363,8 @@ namespace Apex_haunch_connection
 
         private GeometricPlane Fitparts(Part part1, Part part2, double thickness1, double thickness2)
         {
-            List<Face_> part1_Face = get_faces(part1);
-            List<Face_> part2_Face = get_faces(part2);
+            List<Face_> part1Faces = get_faces(part1);
+            List<Face_> part2Faces = get_faces(part2);
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             Point part1mid = MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
@@ -396,29 +396,62 @@ namespace Apex_haunch_connection
             Point point1 = intersectionMidPoint + thickness1 * fittingPlain.GetNormal();
             Point point2 = intersectionMidPoint - thickness2 * fittingPlain.GetNormal();
             var plaine = ConvertGeometricPlaneToPlane(fittingPlain);
-            Fitting fitting = new Fitting();
-            fitting.Plane.AxisX = plaine.AxisX;
-            fitting.Plane.AxisY = plaine.AxisY;
-            fitting.Father = part1;
-            
+
+            GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
+              planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
+              planeB1 = ConvertFaceToGeometricPlane(part2Faces[5].Face),
+              planeB2 = ConvertFaceToGeometricPlane(part2Faces[11].Face);
+
+
+            Line line1 = Intersection.PlaneToPlane(planeA1, planeB1),
+            line2 = Intersection.PlaneToPlane(planeA2, planeB1),
+            line3 = Intersection.PlaneToPlane(planeA1, planeB2),
+            line4 = Intersection.PlaneToPlane(planeA2, planeB2);
+            Line holdLine = null;
+            double d = -1;
+            foreach (var line in new List<Line> { line1,line2,line3,line4} )
+            {
+                if ( d < Distance.PointToLine(mid,line) )
+                {
+                    d = Distance.PointToLine(mid,line);
+                    holdLine = line;
+                }
+            }
+            Point holdPoint1 = Intersection.LineToPlane(holdLine, newplain),
+                holdPoint2 = Projection.PointToPlane(holdPoint1,fittingPlain);
+            Line l1; 
+            if (Distance.PointToPoint(holdPoint1, part1mid) < Distance.PointToPoint(holdPoint2, part1mid))            
+                l1 = new Line(holdPoint2, holdPoint1);
+            else
+                l1 = new Line(holdPoint1, holdPoint2);
+            Vector vector = new Vector(l1.Direction);
+            point1 = point1 + vector.GetNormal() * Distance.PointToPoint(holdPoint1, holdPoint2);
+            point2 = point2 + vector.GetNormal() * Distance.PointToPoint(holdPoint1, holdPoint2);
 
             Fitting fitting1 = new Fitting();
             fitting1.Plane.AxisX = plaine.AxisX;
             fitting1.Plane.AxisY = plaine.AxisY;
-            fitting1.Father = part2;
-            if (Distance.PointToPoint(point1, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)) < Distance.PointToPoint(point2, MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point)))
+            fitting1.Father = part1;
+            
+
+            Fitting fitting2 = new Fitting();
+            fitting2.Plane.AxisX = plaine.AxisX;
+            fitting2.Plane.AxisY = plaine.AxisY;
+            fitting2.Father = part2;
+            if (Distance.PointToPoint(point1, part1mid) < Distance.PointToPoint(point2, part1mid))
             {
-                fitting.Plane.Origin = point1;
-                fitting1.Plane.Origin = point2;
+                fitting1.Plane.Origin = point1;
+                fitting2.Plane.Origin = point2;
             }
             else
             {
-                fitting.Plane.Origin = point2;
-                fitting1.Plane.Origin = point1;
+                fitting1.Plane.Origin = point2;
+                fitting2.Plane.Origin = point1;
             }
-            fitting.Insert();
             fitting1.Insert();
-            return fittingPlain;
+            fitting2.Insert();
+            
+            return new GeometricPlane(holdPoint1,fittingPlain.GetNormal());
         }
         private ArrayList Plates(Part part1, Part part2, double topHight, double middleHight, double bottomHight, double width, double thickness1, double thickness2, GeometricPlane geometricPlane)
         {
@@ -426,14 +459,12 @@ namespace Apex_haunch_connection
             ArrayList part2_centerLine = part2.GetCenterLine(false);
             List<Face_> part1Faces = get_faces(part1),
                 part2Faces = get_faces(part2);
-            LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
-            Point intersectionMidPoint = MidPoint(intersectLineSegment.StartPoint, intersectLineSegment.EndPoint);
+            Point p1 = Intersection.LineToPlane(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), geometricPlane),
+                p2 = Intersection.LineToPlane(new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point), geometricPlane);
+            Point intersectionMidPoint = MidPoint(p1, p2);
             GeometricPlane gp = new GeometricPlane(intersectionMidPoint, part1Faces[2].Vector);
             Line line = Intersection.PlaneToPlane(gp, geometricPlane);
             Point refference = Projection.PointToLine(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), line);
-            
-           
-            
 
             GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
                planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
