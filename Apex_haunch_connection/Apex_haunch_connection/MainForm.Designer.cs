@@ -34,6 +34,8 @@ namespace Apex_haunch_connection
             this.OkApplyModifyGetOnOffCancel = new Tekla.Structures.Dialog.UIControls.OkApplyModifyGetOnOffCancel();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.ParametersTabPage = new System.Windows.Forms.TabPage();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -124,7 +126,7 @@ namespace Apex_haunch_connection
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(712, 645);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(723, 645);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // OkApplyModifyGetOnOffCancel
@@ -136,7 +138,7 @@ namespace Apex_haunch_connection
             this.OkApplyModifyGetOnOffCancel.Location = new System.Drawing.Point(5, 604);
             this.OkApplyModifyGetOnOffCancel.Margin = new System.Windows.Forms.Padding(5);
             this.OkApplyModifyGetOnOffCancel.Name = "OkApplyModifyGetOnOffCancel";
-            this.OkApplyModifyGetOnOffCancel.Size = new System.Drawing.Size(702, 36);
+            this.OkApplyModifyGetOnOffCancel.Size = new System.Drawing.Size(713, 36);
             this.OkApplyModifyGetOnOffCancel.TabIndex = 19;
             this.OkApplyModifyGetOnOffCancel.OkClicked += new System.EventHandler(this.OkApplyModifyGetOnOffCancel_OkClicked);
             this.OkApplyModifyGetOnOffCancel.ApplyClicked += new System.EventHandler(this.OkApplyModifyGetOnOffCancel_ApplyClicked);
@@ -159,7 +161,7 @@ namespace Apex_haunch_connection
             this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(704, 528);
+            this.tabControl.Size = new System.Drawing.Size(715, 528);
             this.tabControl.TabIndex = 18;
             // 
             // ParametersTabPage
@@ -167,6 +169,8 @@ namespace Apex_haunch_connection
             this.structuresExtender.SetAttributeName(this.ParametersTabPage, null);
             this.structuresExtender.SetAttributeTypeName(this.ParametersTabPage, null);
             this.structuresExtender.SetBindPropertyName(this.ParametersTabPage, null);
+            this.ParametersTabPage.Controls.Add(this.textBox11);
+            this.ParametersTabPage.Controls.Add(this.label8);
             this.ParametersTabPage.Controls.Add(this.textBox5);
             this.ParametersTabPage.Controls.Add(this.textBox2);
             this.ParametersTabPage.Controls.Add(this.textBox1);
@@ -179,6 +183,28 @@ namespace Apex_haunch_connection
             this.ParametersTabPage.TabIndex = 2;
             this.ParametersTabPage.Text = "Parameters";
             this.ParametersTabPage.UseVisualStyleBackColor = true;
+            // 
+            // textBox11
+            // 
+            this.structuresExtender.SetAttributeName(this.textBox11, "PlateWidth");
+            this.structuresExtender.SetAttributeTypeName(this.textBox11, "Distance");
+            this.structuresExtender.SetBindPropertyName(this.textBox11, null);
+            this.textBox11.Location = new System.Drawing.Point(518, 70);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(100, 22);
+            this.textBox11.TabIndex = 13;
+            // 
+            // label8
+            // 
+            this.structuresExtender.SetAttributeName(this.label8, null);
+            this.structuresExtender.SetAttributeTypeName(this.label8, null);
+            this.label8.AutoSize = true;
+            this.structuresExtender.SetBindPropertyName(this.label8, null);
+            this.label8.Location = new System.Drawing.Point(515, 51);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(75, 16);
+            this.label8.TabIndex = 12;
+            this.label8.Text = "Plate Width";
             // 
             // textBox5
             // 
@@ -240,7 +266,7 @@ namespace Apex_haunch_connection
             this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(696, 499);
+            this.tabPage1.Size = new System.Drawing.Size(707, 499);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Bolt";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -355,7 +381,7 @@ namespace Apex_haunch_connection
             this.panel2.Controls.Add(this.label16);
             this.panel2.Controls.Add(this.label15);
             this.panel2.Controls.Add(this.label14);
-            this.panel2.Location = new System.Drawing.Point(429, 3);
+            this.panel2.Location = new System.Drawing.Point(15, 10);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(253, 232);
             this.panel2.TabIndex = 80;
@@ -490,7 +516,7 @@ namespace Apex_haunch_connection
             this.panel1.Controls.Add(this.comboBox6);
             this.panel1.Controls.Add(this.comboBox5);
             this.panel1.Controls.Add(this.pictureBox3);
-            this.panel1.Location = new System.Drawing.Point(14, 3);
+            this.panel1.Location = new System.Drawing.Point(290, 10);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(409, 232);
             this.panel1.TabIndex = 79;
@@ -877,7 +903,7 @@ namespace Apex_haunch_connection
             this.saveLoad.Margin = new System.Windows.Forms.Padding(5);
             this.saveLoad.Name = "saveLoad";
             this.saveLoad.SaveAsText = "";
-            this.saveLoad.Size = new System.Drawing.Size(702, 53);
+            this.saveLoad.Size = new System.Drawing.Size(713, 53);
             this.saveLoad.TabIndex = 0;
             this.saveLoad.UserDefinedHelpFilePath = null;
             // 
@@ -897,10 +923,11 @@ namespace Apex_haunch_connection
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.structuresExtender.SetBindPropertyName(this, null);
-            this.ClientSize = new System.Drawing.Size(712, 645);
+            this.ClientSize = new System.Drawing.Size(723, 645);
             this.Controls.Add(this.tableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(741, 692);
             this.Name = "MainForm";
             this.Text = "Apex Haunch Connection";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -989,5 +1016,7 @@ namespace Apex_haunch_connection
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.Label label8;
     }
 }

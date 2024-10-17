@@ -424,14 +424,17 @@ namespace Apex_haunch_connection
         {
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
-            LineSegment intersection_CenterLine = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
             List<Face_> part1Faces = get_faces(part1),
                 part2Faces = get_faces(part2);
             LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
-            Point po1 = Projection.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), geometricPlane),
-                po2 = Projection.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), geometricPlane);
+            Point intersectionMidPoint = MidPoint(intersectLineSegment.StartPoint, intersectLineSegment.EndPoint);
+            GeometricPlane gp = new GeometricPlane(intersectionMidPoint, part1Faces[2].Vector);
+            Line line = Intersection.PlaneToPlane(gp, geometricPlane);
+            Point refference = Projection.PointToLine(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), line);
+            
+           
+            
 
-            Point refference = MidPoint(po1, po2);
             GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
                planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
                planeB1 = ConvertFaceToGeometricPlane(part2Faces[5].Face),
@@ -462,7 +465,7 @@ namespace Apex_haunch_connection
 
             Point startPoint = FindPointOnLine(top, refference, topHight * -1);
             double totalBottomdistance = middleHight + bottomHight;
-            Point endPoint = FindPointOnLine(MidPoint(intersectLineSegment.Point1, intersectLineSegment.Point2), refference, totalBottomdistance);
+            Point endPoint = FindPointOnLine(intersectionMidPoint, refference, totalBottomdistance);
             Beam beam1 = new Beam();
             beam1.StartPoint = startPoint;
             beam1.EndPoint = endPoint;
