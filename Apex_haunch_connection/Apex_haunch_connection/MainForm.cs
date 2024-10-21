@@ -53,6 +53,7 @@ namespace Apex_haunch_connection
 
             foreach (ComboBox item in new List<ComboBox> { comboBox5, comboBox4, comboBox6, comboBox7, comboBox8, comboBox9, comboBox10 })
             {
+                item.Items.Clear();
                 item.Items.Add("Yes");
                 item.Items.Add("no");
             }
