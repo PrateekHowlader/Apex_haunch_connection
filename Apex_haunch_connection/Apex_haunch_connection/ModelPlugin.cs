@@ -762,10 +762,11 @@ namespace Apex_haunch_connection
 
             ContourPlate cp1 = new ContourPlate();
             ArrayList countourPoints = new ArrayList();
-
+            GeometricPlane part1CenterPlain = new GeometricPlane(part1_centerLine[0] as Point, part1Faces[2].Vector); 
             foreach (Point point in new List<Point> { pA1, pA2, pA3 })
             {
-                ContourPoint contourPoint = new ContourPoint(point, new Chamfer(10, 10, Chamfer.ChamferTypeEnum.CHAMFER_LINE));
+                Point p = Projection.PointToPlane(point, part1CenterPlain);
+                ContourPoint contourPoint = new ContourPoint(p, new Chamfer(10, 10, Chamfer.ChamferTypeEnum.CHAMFER_LINE));
                 countourPoints.Add(contourPoint);
             }
 
@@ -793,10 +794,11 @@ namespace Apex_haunch_connection
 
             ContourPlate cp2 = new ContourPlate();
             ArrayList countourPoints1 = new ArrayList();
-
+            GeometricPlane part2CenterPlain = new GeometricPlane(part2_centerLine[0] as Point, part2Faces[2].Vector);
             foreach (Point point in new List<Point> { pB1, pB2, pB3 })
             {
-                ContourPoint contourPoint = new ContourPoint(point, new Chamfer(10, 10, Chamfer.ChamferTypeEnum.CHAMFER_LINE));
+                Point p = Projection.PointToPlane(point, part2CenterPlain);
+                ContourPoint contourPoint = new ContourPoint(p, new Chamfer(10, 10, Chamfer.ChamferTypeEnum.CHAMFER_LINE));
                 countourPoints1.Add(contourPoint);
             }
 
