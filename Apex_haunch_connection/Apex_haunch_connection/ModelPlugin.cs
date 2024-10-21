@@ -86,6 +86,9 @@ namespace Apex_haunch_connection
         [StructuresField("BA1OffsetY")]
         public double BA1OffsetY;
 
+        [StructuresField("TopBoltOffset")]
+        public double TopBoltOffset;
+
         [StructuresField("HaunchWebThickness")]
         public double HaunchWebThickness;
 
@@ -141,6 +144,7 @@ namespace Apex_haunch_connection
         private int _FlagNut2;
         private double _BA1OffsetX;
         private double _BA1OffsetY;
+        private double _TopBoltOffset;
 
         private double _HaunchWebThickness;
         private double _FlangeThickness;
@@ -298,6 +302,7 @@ namespace Apex_haunch_connection
             _BA1xText = Data.BA1xText;
             _BA1OffsetX = Data.BA1OffsetX;
             _BA1OffsetY = Data.BA1OffsetY;
+            _TopBoltOffset = Data.TopBoltOffset;
 
             _FlangeThickness = Data.FlangeThickness;
             _HaunchWebThickness = Data.HaunchWebThickness;
@@ -383,6 +388,9 @@ namespace Apex_haunch_connection
 
             if (IsDefaultValue(_BA1OffsetY))
             { _BA1OffsetY = 0; }
+
+            if (IsDefaultValue(_TopBoltOffset))
+            { _TopBoltOffset = -1; }
 
             if (IsDefaultValue(_FlangeThickness))
                 _FlangeThickness = 10;
@@ -681,6 +689,8 @@ namespace Apex_haunch_connection
             Point mid = MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
             Beam beam = parts[0] as Beam;
             Point point1 = FindPointOnLine(mid, beam.StartPoint, total / 2 + _BA1OffsetX);
+            if (_TopBoltOffset > 0)
+                point1 = FindPointOnLine(beam.StartPoint, beam.EndPoint, _TopBoltOffset);
             bA.FirstPosition = Projection.PointToPlane(point1, geometricPlane);
             bA.SecondPosition = Projection.PointToPlane(beam.EndPoint, geometricPlane);
             bA.Insert();
