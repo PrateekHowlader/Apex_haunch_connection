@@ -65,6 +65,11 @@ namespace Apex_haunch_connection
             comboBox10.SelectedIndex = 1;
 
             comboBox4.SelectedIndex = 0;
+            comboBox1.Items.Add("Top");
+            comboBox1.Items.Add("Middle");
+            comboBox1.SelectedIndex = 0;
+            pictureBox6.Image = imageList1.Images[comboBox1.SelectedIndex];
+
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -84,6 +89,16 @@ namespace Apex_haunch_connection
         private void textBox10_TextChanged(object sender, EventArgs e)
         {
             materialCatalog1.SelectedMaterial = textBox10.Text;
+        }
+
+        private void pictureBox6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pictureBox6.Image = imageList1.Images[comboBox1.SelectedIndex];
         }
     }
 }
