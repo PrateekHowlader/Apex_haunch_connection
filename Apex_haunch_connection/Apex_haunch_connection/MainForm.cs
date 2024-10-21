@@ -83,12 +83,13 @@ namespace Apex_haunch_connection
         }
         private void materialCatalog1_select(object sender, EventArgs e)
         {
-            textBox10.Text = materialCatalog1.SelectedMaterial.ToString();
+           // textBox10.SelectedText = materialCatalog1.SelectedMaterial.ToString();
+            SetAttributeValue(textBox10, materialCatalog1.SelectedMaterial.ToString());
         }
 
         private void textBox10_TextChanged(object sender, EventArgs e)
         {
-            materialCatalog1.SelectedMaterial = textBox10.Text;
+            
         }
 
         private void pictureBox6_Click(object sender, EventArgs e)

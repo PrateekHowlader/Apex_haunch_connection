@@ -396,13 +396,17 @@ namespace Apex_haunch_connection
 
             if (IsDefaultValue(_HaunchWidth))
                 _HaunchWidth = 150;
+
             if (IsDefaultValue(_Material))
                 _Material = "IS2062";
 
             if (IsDefaultValue(_LayoutFlag))
                 _LayoutFlag = 0;
         }
+        public void blablabla(string s)
+        {
 
+        }
         private GeometricPlane Fitparts(Part part1, Part part2, double thickness1, double thickness2)
         {
             List<Face_> part1Faces = get_faces(part1);

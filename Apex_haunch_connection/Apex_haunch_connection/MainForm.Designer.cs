@@ -83,6 +83,10 @@ namespace Apex_haunch_connection
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox16 = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBox15 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
@@ -90,17 +94,13 @@ namespace Apex_haunch_connection
             this.label4 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label11 = new System.Windows.Forms.Label();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.saveLoad = new Tekla.Structures.Dialog.UIControls.SaveLoad();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox15 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox16 = new System.Windows.Forms.TextBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.label11 = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.ParametersTabPage.SuspendLayout();
@@ -730,6 +730,7 @@ namespace Apex_haunch_connection
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(100, 22);
             this.textBox10.TabIndex = 6;
+            
             this.textBox10.TextChanged += new System.EventHandler(this.textBox10_TextChanged);
             // 
             // materialCatalog1
@@ -827,6 +828,50 @@ namespace Apex_haunch_connection
             this.tabPage3.Text = "Haunch";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label10
+            // 
+            this.structuresExtender.SetAttributeName(this.label10, null);
+            this.structuresExtender.SetAttributeTypeName(this.label10, null);
+            this.label10.AutoSize = true;
+            this.structuresExtender.SetBindPropertyName(this.label10, null);
+            this.label10.Location = new System.Drawing.Point(267, 300);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(103, 16);
+            this.label10.TabIndex = 18;
+            this.label10.Text = "Haunch Length2";
+            // 
+            // textBox16
+            // 
+            this.structuresExtender.SetAttributeName(this.textBox16, "HaunchLength2");
+            this.structuresExtender.SetAttributeTypeName(this.textBox16, "Distance");
+            this.structuresExtender.SetBindPropertyName(this.textBox16, null);
+            this.textBox16.Location = new System.Drawing.Point(270, 319);
+            this.textBox16.Name = "textBox16";
+            this.textBox16.Size = new System.Drawing.Size(100, 22);
+            this.textBox16.TabIndex = 17;
+            // 
+            // label9
+            // 
+            this.structuresExtender.SetAttributeName(this.label9, null);
+            this.structuresExtender.SetAttributeTypeName(this.label9, null);
+            this.label9.AutoSize = true;
+            this.structuresExtender.SetBindPropertyName(this.label9, null);
+            this.label9.Location = new System.Drawing.Point(124, 300);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(103, 16);
+            this.label9.TabIndex = 16;
+            this.label9.Text = "Haunch Length1";
+            // 
+            // textBox15
+            // 
+            this.structuresExtender.SetAttributeName(this.textBox15, "HaunchLength1");
+            this.structuresExtender.SetAttributeTypeName(this.textBox15, "Distance");
+            this.structuresExtender.SetBindPropertyName(this.textBox15, null);
+            this.textBox15.Location = new System.Drawing.Point(127, 319);
+            this.textBox15.Name = "textBox15";
+            this.textBox15.Size = new System.Drawing.Size(100, 22);
+            this.textBox15.TabIndex = 15;
+            // 
             // textBox3
             // 
             this.structuresExtender.SetAttributeName(this.textBox3, "FlangeThickness");
@@ -905,6 +950,57 @@ namespace Apex_haunch_connection
             this.pictureBox4.TabIndex = 7;
             this.pictureBox4.TabStop = false;
             // 
+            // tabPage4
+            // 
+            this.structuresExtender.SetAttributeName(this.tabPage4, null);
+            this.structuresExtender.SetAttributeTypeName(this.tabPage4, null);
+            this.structuresExtender.SetBindPropertyName(this.tabPage4, null);
+            this.tabPage4.Controls.Add(this.label11);
+            this.tabPage4.Controls.Add(this.pictureBox6);
+            this.tabPage4.Controls.Add(this.comboBox1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 25);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(707, 499);
+            this.tabPage4.TabIndex = 6;
+            this.tabPage4.Text = "Layout";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.structuresExtender.SetAttributeName(this.label11, null);
+            this.structuresExtender.SetAttributeTypeName(this.label11, null);
+            this.label11.AutoSize = true;
+            this.structuresExtender.SetBindPropertyName(this.label11, null);
+            this.label11.Location = new System.Drawing.Point(93, 64);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(47, 16);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Layout";
+            // 
+            // pictureBox6
+            // 
+            this.structuresExtender.SetAttributeName(this.pictureBox6, null);
+            this.structuresExtender.SetAttributeTypeName(this.pictureBox6, null);
+            this.structuresExtender.SetBindPropertyName(this.pictureBox6, null);
+            this.pictureBox6.Location = new System.Drawing.Point(225, 119);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(414, 328);
+            this.pictureBox6.TabIndex = 1;
+            this.pictureBox6.TabStop = false;
+            this.pictureBox6.Click += new System.EventHandler(this.pictureBox6_Click);
+            // 
+            // comboBox1
+            // 
+            this.structuresExtender.SetAttributeName(this.comboBox1, "LayoutFlag");
+            this.structuresExtender.SetAttributeTypeName(this.comboBox1, "Integer");
+            this.structuresExtender.SetBindPropertyName(this.comboBox1, null);
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(96, 83);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 24);
+            this.comboBox1.TabIndex = 0;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // saveLoad
             // 
             this.structuresExtender.SetAttributeName(this.saveLoad, null);
@@ -932,107 +1028,12 @@ namespace Apex_haunch_connection
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // label9
-            // 
-            this.structuresExtender.SetAttributeName(this.label9, null);
-            this.structuresExtender.SetAttributeTypeName(this.label9, null);
-            this.label9.AutoSize = true;
-            this.structuresExtender.SetBindPropertyName(this.label9, null);
-            this.label9.Location = new System.Drawing.Point(124, 300);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(103, 16);
-            this.label9.TabIndex = 16;
-            this.label9.Text = "Haunch Length1";
-            // 
-            // textBox15
-            // 
-            this.structuresExtender.SetAttributeName(this.textBox15, "HaunchLength1");
-            this.structuresExtender.SetAttributeTypeName(this.textBox15, "Distance");
-            this.structuresExtender.SetBindPropertyName(this.textBox15, null);
-            this.textBox15.Location = new System.Drawing.Point(127, 319);
-            this.textBox15.Name = "textBox15";
-            this.textBox15.Size = new System.Drawing.Size(100, 22);
-            this.textBox15.TabIndex = 15;
-            // 
-            // label10
-            // 
-            this.structuresExtender.SetAttributeName(this.label10, null);
-            this.structuresExtender.SetAttributeTypeName(this.label10, null);
-            this.label10.AutoSize = true;
-            this.structuresExtender.SetBindPropertyName(this.label10, null);
-            this.label10.Location = new System.Drawing.Point(267, 300);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(103, 16);
-            this.label10.TabIndex = 18;
-            this.label10.Text = "Haunch Length2";
-            // 
-            // textBox16
-            // 
-            this.structuresExtender.SetAttributeName(this.textBox16, "HaunchLength2");
-            this.structuresExtender.SetAttributeTypeName(this.textBox16, "Distance");
-            this.structuresExtender.SetBindPropertyName(this.textBox16, null);
-            this.textBox16.Location = new System.Drawing.Point(270, 319);
-            this.textBox16.Name = "textBox16";
-            this.textBox16.Size = new System.Drawing.Size(100, 22);
-            this.textBox16.TabIndex = 17;
-            // 
-            // tabPage4
-            // 
-            this.structuresExtender.SetAttributeName(this.tabPage4, null);
-            this.structuresExtender.SetAttributeTypeName(this.tabPage4, null);
-            this.structuresExtender.SetBindPropertyName(this.tabPage4, null);
-            this.tabPage4.Controls.Add(this.label11);
-            this.tabPage4.Controls.Add(this.pictureBox6);
-            this.tabPage4.Controls.Add(this.comboBox1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 25);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(707, 499);
-            this.tabPage4.TabIndex = 6;
-            this.tabPage4.Text = "Layout";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            this.structuresExtender.SetAttributeName(this.comboBox1, "LayoutFlag");
-            this.structuresExtender.SetAttributeTypeName(this.comboBox1, "Integer");
-            this.structuresExtender.SetBindPropertyName(this.comboBox1, null);
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(96, 83);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 24);
-            this.comboBox1.TabIndex = 0;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // pictureBox6
-            // 
-            this.structuresExtender.SetAttributeName(this.pictureBox6, null);
-            this.structuresExtender.SetAttributeTypeName(this.pictureBox6, null);
-            this.structuresExtender.SetBindPropertyName(this.pictureBox6, null);
-            this.pictureBox6.Location = new System.Drawing.Point(225, 119);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(414, 328);
-            this.pictureBox6.TabIndex = 1;
-            this.pictureBox6.TabStop = false;
-            this.pictureBox6.Click += new System.EventHandler(this.pictureBox6_Click);
-            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Screenshot 2024-10-17 184031.png");
             this.imageList1.Images.SetKeyName(1, "Screenshot 2024-10-15 160201.png");
-            // 
-            // label11
-            // 
-            this.structuresExtender.SetAttributeName(this.label11, null);
-            this.structuresExtender.SetAttributeTypeName(this.label11, null);
-            this.label11.AutoSize = true;
-            this.structuresExtender.SetBindPropertyName(this.label11, null);
-            this.label11.Location = new System.Drawing.Point(93, 64);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(47, 16);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "Layout";
             // 
             // MainForm
             // 
