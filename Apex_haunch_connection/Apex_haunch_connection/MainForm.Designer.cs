@@ -93,7 +93,6 @@ namespace Apex_haunch_connection
             this.label11 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.saveLoad = new Tekla.Structures.Dialog.UIControls.SaveLoad();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
@@ -953,15 +952,6 @@ namespace Apex_haunch_connection
             this.saveLoad.TabIndex = 0;
             this.saveLoad.UserDefinedHelpFilePath = null;
             // 
-            // contextMenuStrip1
-            // 
-            this.structuresExtender.SetAttributeName(this.contextMenuStrip1, null);
-            this.structuresExtender.SetAttributeTypeName(this.contextMenuStrip1, null);
-            this.structuresExtender.SetBindPropertyName(this.contextMenuStrip1, null);
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -1176,7 +1166,6 @@ namespace Apex_haunch_connection
         private System.Windows.Forms.TextBox textBox10;
         private Tekla.Structures.Dialog.UIControls.MaterialCatalog materialCatalog1;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox11;
