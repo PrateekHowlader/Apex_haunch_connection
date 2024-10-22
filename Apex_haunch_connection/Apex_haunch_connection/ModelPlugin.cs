@@ -475,11 +475,7 @@ namespace Apex_haunch_connection
                 }
                 holdPoint1 = Intersection.LineToPlane(holdLine, newplain);
                 holdPoint2 = Projection.PointToPlane(holdPoint1, fittingPlain);
-                Line l1;
-                if (Distance.PointToPoint(holdPoint1, part1mid) < Distance.PointToPoint(holdPoint2, part1mid))
-                    l1 = new Line(holdPoint2, holdPoint1);
-                else
-                    l1 = new Line(holdPoint1, holdPoint2);
+                Line  l1 = new Line(holdPoint2, holdPoint1);
                 Vector vector = new Vector(l1.Direction);
                 point1 = point1 + vector.GetNormal() * Distance.PointToPoint(holdPoint1, holdPoint2);
                 point2 = point2 + vector.GetNormal() * Distance.PointToPoint(holdPoint1, holdPoint2);
