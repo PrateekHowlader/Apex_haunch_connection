@@ -1021,22 +1021,7 @@ namespace Apex_haunch_connection
             }
             return points;
         }
-        public static double DistanceBetweenParallelLines(Line line1, Line line2)
-        {
-            // Get the direction vector of the first line (parallel to the second line)
-            Vector directionLine1 = new Vector(line1.Origin.X - line1.Origin.X, line1.Origin.Y - line1.Origin.Y, line1.Origin.Z - line1.Origin.Z);
-
-            // Vector between a point on line1 and a point on line2
-            Vector connectingVector = new Vector(line2.Origin.X - line1.Origin.X, line2.Origin.Y - line1.Origin.Y, line2.Origin.Z - line1.Origin.Z);
-
-            // Find the cross product of the direction vector and the connecting vector
-            Vector crossProduct = directionLine1.Cross(connectingVector);
-
-            // The magnitude of the cross product divided by the magnitude of the direction vector gives the shortest distance
-            double distance = crossProduct.GetLength() / directionLine1.GetLength();
-
-            return distance;
-        }
+        
         private static Point GetClosestPointOnLineSegment(Point point, Point lineStart, Point lineEnd)
         {
             // Vector from line start to the point
