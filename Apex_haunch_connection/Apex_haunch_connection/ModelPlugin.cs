@@ -11,7 +11,10 @@ using Tekla.Structures.Plugins;
 using Tekla.Structures.Solid;
 using static Tekla.Structures.Model.Position;
 using Identifier = Tekla.Structures.Identifier;
+using Line = Tekla.Structures.Geometry3d.Line;
+using Fitting = Tekla.Structures.Model.Fitting;
 
+using TeklaPH;
 
 namespace Apex_haunch_connection
 
@@ -417,15 +420,17 @@ namespace Apex_haunch_connection
         }
         private GeometricPlane Fitparts(Part part1, Part part2, double thickness1, double thickness2)
         {
-            List<Face_> part1Faces = get_faces(part1);
-            List<Face_> part2Faces = get_faces(part2);
+            GeoPlane geoPlane = new GeoPlane();
+            Faces _Faces = new Faces();
+            List<Faces.Face_> part1Faces = Faces.Get_faces(part1);
+            List<Faces.Face_> part2Faces = Faces.Get_faces(part2);
             ArrayList part1_centerLine = part1.GetCenterLine(false);
-            Point part1mid = MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point);
+            Point part1mid = TeklaPH.Line.MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
-            Point part2mid = MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
+            Point part2mid = TeklaPH.Line.MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
 
             LineSegment intersectLineSegment = Intersection.LineToLine(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point));
-            Point intersectionMidPoint = MidPoint(intersectLineSegment.StartPoint, intersectLineSegment.EndPoint);
+            Point intersectionMidPoint = TeklaPH.Line.MidPoint(intersectLineSegment.StartPoint, intersectLineSegment.EndPoint);
             Point holdPoint1 = intersectionMidPoint, holdPoint2;
             double d1 = Distance.PointToPoint(intersectionMidPoint, part1mid),
                 d2 = Distance.PointToPoint(intersectionMidPoint, part2mid);
@@ -434,29 +439,29 @@ namespace Apex_haunch_connection
             {
                 p2 = part2mid;
 
-                p1 = FindPointOnLine(intersectionMidPoint, part1mid, d2);
+                p1 = TeklaPH.Line.FindPointOnLine(intersectionMidPoint, part1mid, d2);
 
 
             }
             else
             {
                 p1 = part1mid;
-                p2 = FindPointOnLine(intersectionMidPoint, part2mid, d1);
+                p2 = TeklaPH.Line.FindPointOnLine(intersectionMidPoint, part2mid, d1);
 
             }
-            GeometricPlane newplain = CreatePlaneFromThreePoints(intersectionMidPoint, p1, p2);
-            Point mid = MidPoint(p1, p2);
+            GeometricPlane newplain = GeoPlane.CreatePlaneFromThreePoints(intersectionMidPoint, p1, p2);
+            Point mid = TeklaPH.Line.MidPoint(p1, p2);
             Point point3 = mid + newplain.GetNormal() * 50;
-            GeometricPlane fittingPlain = CreatePlaneFromThreePoints(intersectionMidPoint, mid, point3);
+            GeometricPlane fittingPlain = GeoPlane.CreatePlaneFromThreePoints(intersectionMidPoint, mid, point3);
             Point point1 = intersectionMidPoint + thickness1 * fittingPlain.GetNormal();
             Point point2 = intersectionMidPoint - thickness2 * fittingPlain.GetNormal();
-            var plaine = ConvertGeometricPlaneToPlane(fittingPlain);
+            var plaine = GeoPlane.ConvertGeometricPlaneToPlane(fittingPlain);
             if (_LayoutFlag == 0)
             {
-                GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
-              planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
-              planeB1 = ConvertFaceToGeometricPlane(part2Faces[5].Face),
-              planeB2 = ConvertFaceToGeometricPlane(part2Faces[11].Face);
+                GeometricPlane planeA1 = Faces.ConvertFaceToGeometricPlane(part1Faces[5].Face),
+              planeA2 = Faces.ConvertFaceToGeometricPlane(part1Faces[11].Face),
+              planeB1 = Faces.ConvertFaceToGeometricPlane(part2Faces[5].Face),
+              planeB2 = Faces.ConvertFaceToGeometricPlane(part2Faces[11].Face);
 
 
                 Line line1 = Intersection.PlaneToPlane(planeA1, planeB1),
@@ -508,30 +513,31 @@ namespace Apex_haunch_connection
         }
         private ArrayList Plates(Part part1, Part part2, double topHight, double middleHight, double bottomHight, double width, double thickness1, double thickness2, GeometricPlane geometricPlane)
         {
+            Faces _Faces = new Faces();
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
-            List<Face_> part1Faces = get_faces(part1),
-                part2Faces = get_faces(part2);
+            List<Faces.Face_> part1Faces =Faces.Get_faces(part1),
+                part2Faces = Faces.Get_faces(part2);
             Point p1 = Intersection.LineToPlane(new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point), geometricPlane),
                 p2 = Intersection.LineToPlane(new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point), geometricPlane);
-            Point intersectionMidPoint = MidPoint(p1, p2);
+            Point intersectionMidPoint = TeklaPH.Line.MidPoint(p1, p2);
             GeometricPlane gp = new GeometricPlane(intersectionMidPoint, part1Faces[2].Vector);
             Line line = Intersection.PlaneToPlane(gp, geometricPlane);
-            Point refference = Projection.PointToLine(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), line);
+            Point refference = Projection.PointToLine(TeklaPH.Line.MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), line);
 
-            GeometricPlane planeA1 = ConvertFaceToGeometricPlane(part1Faces[5].Face),
-               planeA2 = ConvertFaceToGeometricPlane(part1Faces[11].Face),
-               planeB1 = ConvertFaceToGeometricPlane(part2Faces[5].Face),
-               planeB2 = ConvertFaceToGeometricPlane(part2Faces[11].Face),
-               g1 = ConvertFaceToGeometricPlane(part1Faces[0].Face),
-               g2 = ConvertFaceToGeometricPlane(part1Faces[10].Face);
+            GeometricPlane planeA1 = Faces.ConvertFaceToGeometricPlane(part1Faces[5].Face),
+               planeA2 = Faces.ConvertFaceToGeometricPlane(part1Faces[11].Face),
+               planeB1 = Faces.ConvertFaceToGeometricPlane(part2Faces[5].Face),
+               planeB2 = Faces.ConvertFaceToGeometricPlane(part2Faces[11].Face),
+               g1 = Faces.ConvertFaceToGeometricPlane(part1Faces[0].Face),
+               g2 = Faces.ConvertFaceToGeometricPlane(part1Faces[10].Face);
 
 
             Line line1 = Intersection.PlaneToPlane(planeA1, geometricPlane),
             line2 = Intersection.PlaneToPlane(planeA2, geometricPlane),
             line3 = Intersection.PlaneToPlane(planeB1, geometricPlane),
             line4 = Intersection.PlaneToPlane(planeB2, geometricPlane);
-            Point top = GetClosestPointOnLineSegment(refference, Intersection.LineToPlane(line1, g1), Intersection.LineToPlane(line1, g2));
+            Point top = Projection.PointToLine(refference, new Line(Intersection.LineToPlane(line1, g1), Intersection.LineToPlane(line1, g2)));
             double distance = Distance.PointToLine(refference, line1);
 
             foreach (Line l in new List<Line> { line2, line3, line4 })
@@ -540,22 +546,22 @@ namespace Apex_haunch_connection
 
                 if (Distance.PointToLine(refference, l) > distance)
                 {
-                    top = GetClosestPointOnLineSegment(refference, Intersection.LineToPlane(l, g1), Intersection.LineToPlane(l, g2));
+                    top = Projection.PointToLine(refference, new Line(Intersection.LineToPlane(l, g1), Intersection.LineToPlane(l, g2)));
                     distance = Distance.PointToLine(refference, l);
                 }
             }
 
             Vector vector = geometricPlane.GetNormal();
 
-            Point startPoint = FindPointOnLine(top, refference, topHight * -1);
+            Point startPoint = TeklaPH.Line.FindPointOnLine(top, refference, topHight * -1);
             double totalBottomdistance = middleHight + bottomHight;
-            Point endPoint = FindPointOnLine(intersectionMidPoint, refference, totalBottomdistance);
+            Point endPoint = TeklaPH.Line.FindPointOnLine(intersectionMidPoint, refference, totalBottomdistance);
             Beam beam1 = new Beam();
             beam1.StartPoint = startPoint;
             beam1.EndPoint = endPoint;
             beam1.Profile.ProfileString = "PLT" + thickness1 + "*" + width;
             beam1.Position.Depth = Position.DepthEnum.MIDDLE;
-            beam1.Position.Plane = Position.PlaneEnum.RIGHT;
+            beam1.Position.Plane = ((vector.X < 0 && vector.Y > 0) || (vector.X > 0 && vector.Y < 0)) ?Position.PlaneEnum.RIGHT: Position.PlaneEnum.LEFT;
             beam1.Position.Rotation = Position.RotationEnum.TOP;
             beam1.Material.MaterialString = _Material;
             beam1.Class = "1";
@@ -565,7 +571,7 @@ namespace Apex_haunch_connection
             beam2.EndPoint = endPoint;
             beam2.Profile.ProfileString = "PLT" + thickness2 + "*" + width;
             beam2.Position.Depth = Position.DepthEnum.MIDDLE;
-            beam2.Position.Plane = Position.PlaneEnum.LEFT;
+            beam2.Position.Plane =((vector.X < 0 && vector.Y > 0) || (vector.X > 0 && vector.Y < 0)) ? Position.PlaneEnum.LEFT : Position.PlaneEnum.RIGHT;
             beam2.Position.Rotation = Position.RotationEnum.TOP;
             beam2.Material.MaterialString = _Material;
             beam2.Class = "1";
@@ -577,7 +583,7 @@ namespace Apex_haunch_connection
         }
         private void boltArray(ArrayList parts, Part beam1, Part beam2)
         {
-
+            Faces _Faces = new Faces();
             BoltArray bA = new BoltArray();
             bA.PartToBeBolted = parts[0] as Beam;
             bA.PartToBoltTo = parts[1] as Beam;
@@ -586,8 +592,8 @@ namespace Apex_haunch_connection
                 beam2Centerline = beam2.GetCenterLine(false);
             LineSegment intersection_CenterLine = Intersection.LineToLine(new Line(beam1Centerline[0] as Point, beam1Centerline[1] as Point), new Line(beam2Centerline[0] as Point, beam2Centerline[1] as Point));
 
-            List<Face_> face_s = get_faces(parts[0] as Beam);
-            List<Face_> cp_faces = face_s.OrderByDescending(fa => CalculateFaceArea(fa)).ToList();
+            List<Faces.Face_> face_s = Faces.Get_faces(parts[0] as Beam);
+            List<Faces.Face_> cp_faces = face_s.OrderByDescending(fa => Faces.CalculateFaceArea(fa)).ToList();
 
             bA.BoltSize = _BoltSizeEnum[_BoltSize];
             bA.Tolerance = _BoltToletance;
@@ -610,7 +616,7 @@ namespace Apex_haunch_connection
 
 
             double total = 0;
-            List<double> doubles = InputConverter(_BA1xText);
+            List<double> doubles = Input.InputConverter(_BA1xText);
             bool flag = false;
             double hold = 0;
 
@@ -644,7 +650,7 @@ namespace Apex_haunch_connection
             bA.StartPointOffset.Dx = 0;
             if (doubles != null)
                 doubles.Clear();
-            doubles = InputConverter(_BA1yText);
+            doubles = Input.InputConverter(_BA1yText);
 
             if (doubles == null)
                 bA.AddBoltDistY(0);
@@ -675,56 +681,57 @@ namespace Apex_haunch_connection
             bA.StartPointOffset.Dz = _BA1OffsetY;
             bA.EndPointOffset.Dz = _BA1OffsetY;
 
-            GeometricPlane gp1 = ConvertFaceToGeometricPlane(cp_faces[0].Face),
-               gp2 = ConvertFaceToGeometricPlane(cp_faces[1].Face);
+            GeometricPlane gp1 = Faces.ConvertFaceToGeometricPlane(cp_faces[0].Face),
+               gp2 = Faces.ConvertFaceToGeometricPlane(cp_faces[1].Face);
             GeometricPlane geometricPlane = new GeometricPlane();
             if (Distance.PointToPlane(intersection_CenterLine.StartPoint, gp1) > Distance.PointToPlane(intersection_CenterLine.StartPoint, gp2))
                 geometricPlane = gp1;
             else
                 geometricPlane = gp2;
-            Point mid = MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
+            Point mid = TeklaPH.Line.MidPoint(intersection_CenterLine.StartPoint, intersection_CenterLine.EndPoint);
             Beam beam = parts[0] as Beam;
-            Point point1 = FindPointOnLine(mid, beam.StartPoint, total / 2 + _BA1OffsetX);
+            Point point1 = TeklaPH.Line.FindPointOnLine(mid, beam.StartPoint, total / 2 + _BA1OffsetX);
             if (_TopBoltOffset > 0)
-                point1 = FindPointOnLine(beam.StartPoint, beam.EndPoint, _TopBoltOffset);
+                point1 = TeklaPH.Line.FindPointOnLine(beam.StartPoint, beam.EndPoint, _TopBoltOffset);
             bA.FirstPosition = Projection.PointToPlane(point1, geometricPlane);
             bA.SecondPosition = Projection.PointToPlane(beam.EndPoint, geometricPlane);
             bA.Insert();
         }
         private ArrayList Hunch(Part part1, Part part2, ArrayList plates, double bottom_length, double webThickness, double flangeThickness, double width, double length1, double length2)
         {
+            
             ArrayList part1_centerLine = part1.GetCenterLine(false);
             ArrayList part2_centerLine = part2.GetCenterLine(false);
-            List<Face_> part1Faces = get_faces(part1),
-               part2Faces = get_faces(part2);
+            List<Faces.Face_> part1Faces = Faces.Get_faces(part1),
+               part2Faces = Faces.Get_faces(part2);
             Beam plate1 = plates[0] as Beam,
                 plate2 = plates[1] as Beam;
 
-            List<Face_> face_s = get_faces(plates[0] as Beam);
-            List<Face_> plate1_faces = face_s.OrderByDescending(fa => CalculateFaceArea(fa)).ToList();
-            face_s = get_faces(plates[1] as Beam);
-            List<Face_> plate2_faces = face_s.OrderByDescending(fa => CalculateFaceArea(fa)).ToList();
+            List<Faces.Face_> face_s = Faces.Get_faces(plates[0] as Beam);
+            List<Faces.Face_> plate1_faces = face_s.OrderByDescending(fa => Faces.CalculateFaceArea(fa)).ToList();
+            face_s = Faces.Get_faces(plates[1] as Beam);
+            List<Faces.Face_> plate2_faces = face_s.OrderByDescending(fa => Faces.CalculateFaceArea(fa)).ToList();
             GeometricPlane plate1Closest = null, plate2Closest = null;
 
-            GeometricPlane plA1 = ConvertFaceToGeometricPlane(plate1_faces[0].Face),
-                plA2 = ConvertFaceToGeometricPlane(plate1_faces[1].Face),
-                plB1 = ConvertFaceToGeometricPlane(plate2_faces[0].Face),
-                plB2 = ConvertFaceToGeometricPlane(plate2_faces[1].Face);
+            GeometricPlane plA1 = Faces.ConvertFaceToGeometricPlane(plate1_faces[0].Face),
+                plA2 = Faces.ConvertFaceToGeometricPlane(plate1_faces[1].Face),
+                plB1 = Faces.ConvertFaceToGeometricPlane(plate2_faces[0].Face),
+                plB2 = Faces.ConvertFaceToGeometricPlane(plate2_faces[1].Face);
             double d = 0;
             foreach (GeometricPlane gp in new List<GeometricPlane> { plA1, plA2, plB1, plB2 })
             {
-                if (d < Distance.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), gp))
+                if (d < Distance.PointToPlane(TeklaPH.Line.MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), gp))
                 {
-                    d = Distance.PointToPlane(MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), gp);
+                    d = Distance.PointToPlane(TeklaPH.Line.MidPoint(part1_centerLine[0] as Point, part1_centerLine[1] as Point), gp);
                     plate2Closest = gp;
                 }
             }
             d = 0;
             foreach (GeometricPlane gp in new List<GeometricPlane> { plA1, plA2, plB1, plB2 })
             {
-                if (d < Distance.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), gp))
+                if (d < Distance.PointToPlane(TeklaPH.Line.MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), gp))
                 {
-                    d = Distance.PointToPlane(MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), gp);
+                    d = Distance.PointToPlane(TeklaPH.Line.MidPoint(part2_centerLine[0] as Point, part2_centerLine[1] as Point), gp);
                     plate1Closest = gp;
                 }
             }
@@ -733,25 +740,25 @@ namespace Apex_haunch_connection
 
 
             GeometricPlane part1FaceColsest = null, part2FaceClosest = null;
-            if (Distance.PointToPlane(plate1.EndPoint, ConvertFaceToGeometricPlane(part1Faces[5].Face)) < Distance.PointToPlane(plate1.EndPoint, ConvertFaceToGeometricPlane(part1Faces[11].Face)))
-                part1FaceColsest = ConvertFaceToGeometricPlane(part1Faces[5].Face);
+            if (Distance.PointToPlane(plate1.EndPoint, Faces.ConvertFaceToGeometricPlane(part1Faces[5].Face)) < Distance.PointToPlane(plate1.EndPoint, Faces.ConvertFaceToGeometricPlane(part1Faces[11].Face)))
+                part1FaceColsest = Faces.ConvertFaceToGeometricPlane(part1Faces[5].Face);
             else
-                part1FaceColsest = ConvertFaceToGeometricPlane(part1Faces[11].Face);
+                part1FaceColsest = Faces.ConvertFaceToGeometricPlane(part1Faces[11].Face);
 
-            if (Distance.PointToPlane(plate1.EndPoint, ConvertFaceToGeometricPlane(part2Faces[5].Face)) < Distance.PointToPlane(plate1.EndPoint, ConvertFaceToGeometricPlane(part2Faces[11].Face)))
-                part2FaceClosest = ConvertFaceToGeometricPlane(part2Faces[5].Face);
+            if (Distance.PointToPlane(plate1.EndPoint, Faces.ConvertFaceToGeometricPlane(part2Faces[5].Face)) < Distance.PointToPlane(plate1.EndPoint, Faces.ConvertFaceToGeometricPlane(part2Faces[11].Face)))
+                part2FaceClosest = Faces.ConvertFaceToGeometricPlane(part2Faces[5].Face);
             else
-                part2FaceClosest = ConvertFaceToGeometricPlane(part2Faces[11].Face);
+                part2FaceClosest = Faces.ConvertFaceToGeometricPlane(part2Faces[11].Face);
 
             Point holdStart = Projection.PointToPlane(plate1.StartPoint, plate1Closest), holdEnd = Projection.PointToPlane(plate1.EndPoint, plate1Closest);
             Point pA1 = Intersection.LineToPlane(new Line(holdStart, holdEnd), part1FaceColsest);
-            Point pA2 = FindPointOnLine(holdEnd, holdStart, bottom_length + flangeThickness);
+            Point pA2 = TeklaPH.Line.FindPointOnLine(holdEnd, holdStart, bottom_length + flangeThickness);
             if (length1 >= 0)
             {
                 Line line = new Line(part1_centerLine[0] as Point, part1_centerLine[1] as Point);
                 double angle = FindShortestAngleBetweenLines(new Line(Intersection.LineToPlane(line, plate1Closest), plate1Closest.GetNormal()), line);
                 hight1 = CalculateOtherSideUsingTan(angle, length1);
-                pA2 = FindPointOnLine(pA1, pA2, hight1);
+                pA2 = TeklaPH.Line.FindPointOnLine(pA1, pA2, hight1);
             }
             Line holdLine = new Line(pA2, plate1Closest.GetNormal());
             Point pA3 = Intersection.LineToPlane(holdLine, part1FaceColsest);
@@ -777,13 +784,13 @@ namespace Apex_haunch_connection
 
             holdStart = Projection.PointToPlane(plate2.StartPoint, plate2Closest); holdEnd = Projection.PointToPlane(plate2.EndPoint, plate2Closest);
             Point pB1 = Intersection.LineToPlane(new Line(holdStart, holdEnd), part2FaceClosest);
-            Point pB2 = FindPointOnLine(holdEnd, holdStart, bottom_length + flangeThickness);
+            Point pB2 = TeklaPH.Line.FindPointOnLine(holdEnd, holdStart, bottom_length + flangeThickness);
             if (length2 >= 0)
             {
                 Line line = new Line(part2_centerLine[0] as Point, part2_centerLine[1] as Point);
                 double angle = FindShortestAngleBetweenLines(new Line(Intersection.LineToPlane(line, plate2Closest), plate2Closest.GetNormal()), line);
                 hight2 = CalculateOtherSideUsingTan(angle, length2);
-                pB2 = FindPointOnLine(pB1, pB2, hight2);
+                pB2 = TeklaPH.Line.FindPointOnLine(pB1, pB2, hight2);
             }
             holdLine = new Line(pB2, plate2Closest.GetNormal());
             Point pB3 = Intersection.LineToPlane(holdLine, part2FaceClosest);
@@ -888,271 +895,9 @@ namespace Apex_haunch_connection
             Weld1.Insert();
 
         }
-        class Face_
-        {
-            public Face Face { get; set; }
-            public Vector Vector { get; set; }
-            public void face_(Face face, Vector vector)
-            {
-                Face = face;
-                Vector = vector;
-            }
-        }
-        private List<Face_> get_faces(Part beam)
-        {
-
-            Solid solid = beam.GetSolid();
-            FaceEnumerator faceEnumerator = solid.GetFaceEnumerator();
-            List<Face_> faces = new List<Face_>();
-            while (faceEnumerator.MoveNext())
-            {
-
-                Face face = faceEnumerator.Current as Face;
-                Vector vector = face.Normal;
-                faces.Add(new Face_ { Face = face, Vector = vector });
-
-            }
-
-            return faces;
-        }
-        private Point MidPoint(Point point, Point point1)
-        {
-            Point mid = new Point((point.X + point1.X) / 2, (point.Y + point1.Y) / 2, (point.Z + point1.Z) / 2);
-            return mid;
-        }
-        private static GeometricPlane ConvertFaceToGeometricPlane(Face face)
-        {
-            ArrayList points = new ArrayList();
-            // Get the edges from the face (since 'Points' is not available)
-            LoopEnumerator loopEnumerator = face.GetLoopEnumerator();
-            while (loopEnumerator.MoveNext())
-            {
-
-                Loop loop = loopEnumerator.Current as Loop;
-                VertexEnumerator vertexEnumerator = loop.GetVertexEnumerator();
-                while (vertexEnumerator.MoveNext())
-                {
-                    points.Add(vertexEnumerator.Current);
-                }
-            }
-
-            Point point1 = points[0] as Point;
-            Point point2 = points[1] as Point;
-            Point point3 = points[2] as Point;
-
-
-
-            if (point1 == null || point2 == null || point3 == null)
-            {
-                throw new ArgumentException("The face does not have sufficient points to define a plane.");
-            }
-
-            // Create vectors from the points
-            Vector vector1 = new Vector(point2.X - point1.X, point2.Y - point1.Y, point2.Z - point1.Z);
-            Vector vector2 = new Vector(point3.X - point1.X, point3.Y - point1.Y, point3.Z - point1.Z);
-
-            // Calculate the normal vector (cross product of the two vectors)
-            Vector normalVector = Vector.Cross(vector1, vector2);
-            normalVector.Normalize();
-
-            // Create the geometric plane using point1 and the normal vector
-            GeometricPlane geometricPlane = new GeometricPlane(point1, normalVector);
-
-            return geometricPlane;
-        }
-        public static GeometricPlane CreatePlaneFromThreePoints(Point point1, Point point2, Point point3)
-        {
-            // Calculate two direction vectors on the plane
-            Vector vector1 = new Vector(point2.X - point1.X, point2.Y - point1.Y, point2.Z - point1.Z);
-            Vector vector2 = new Vector(point3.X - point1.X, point3.Y - point1.Y, point3.Z - point1.Z);
-
-            // Calculate the normal vector of the plane by taking the cross product of the two direction vectors
-            Vector normalVector = vector1.Cross(vector2);
-
-            // Create and return the geometric plane using the first point and the normal vector
-            GeometricPlane plane = new GeometricPlane(point1, normalVector);
-
-            return plane;
-        }
-        private void GetFaceAxes(Face face, out Vector xAxis, out Vector yAxis)
-        {
-            Vector normalVector;
-            // Get the loop vertices of the face to extract points
-            ArrayList vertices = Get_Points(face);
-
-            if (vertices == null || vertices.Count < 3)
-            {
-                throw new ArgumentException("The face does not have enough vertices to define axes.");
-            }
-
-            // Select three distinct points to define the plane and axes
-            Point point1 = vertices[0] as Point;
-            Point point2 = vertices[1] as Point;
-            Point point3 = vertices[2] as Point;
-
-            // Define the X-axis vector as the vector between point1 and point2
-            xAxis = new Vector(point2.X - point1.X, point2.Y - point1.Y, point2.Z - point1.Z);
-            xAxis.Normalize();
-
-            // Define another vector on the face
-            Vector vector2 = new Vector(point3.X - point1.X, point3.Y - point1.Y, point3.Z - point1.Z);
-
-            // Calculate the normal vector (cross product of xAxis and vector2)
-            normalVector = Vector.Cross(xAxis, vector2);
-            normalVector.Normalize();
-
-            // Define the Y-axis vector as the cross product of the normal vector and X-axis vector
-            yAxis = Vector.Cross(normalVector, xAxis);
-            yAxis.Normalize();
-        }
-        private ArrayList Get_Points(Face face)
-        {
-            ArrayList points = new ArrayList();
-            LoopEnumerator loopEnumerator = face.GetLoopEnumerator();
-            while (loopEnumerator.MoveNext())
-            {
-
-                Loop loop = loopEnumerator.Current as Loop;
-                VertexEnumerator vertexEnumerator = loop.GetVertexEnumerator();
-                while (vertexEnumerator.MoveNext())
-                {
-                    points.Add(vertexEnumerator.Current);
-                }
-            }
-            return points;
-        }
         
-        private static Point GetClosestPointOnLineSegment(Point point, Point lineStart, Point lineEnd)
-        {
-            // Vector from line start to the point
-            Vector startToPoint = new Vector(point - lineStart);
-
-            // Direction vector of the line segment
-            Vector lineDirection = new Vector(lineEnd - lineStart);
-            double lineLengthSquared = lineDirection.Dot(lineDirection);
-
-            // Project the point onto the line segment
-            double t = startToPoint.Dot(lineDirection) / lineLengthSquared;
-
-            // Clamp t to the range [0, 1] to keep the projection within the segment
-            t = Math.Max(0, Math.Min(1, t));
-
-            // Calculate the closest point on the line segment
-            return new Point(
-                lineStart.X + t * lineDirection.X,
-                lineStart.Y + t * lineDirection.Y,
-                lineStart.Z + t * lineDirection.Z
-            );
-        }
-
-        public static Point FindPointOnLine(Point startPoint, Point secondPoint, double distance)
-        {
-            if (distance == 0)
-                return startPoint;
-            // Step 1: Calculate the direction vector from startPoint to secondPoint
-            Vector direction = new Vector(
-                secondPoint.X - startPoint.X,
-                secondPoint.Y - startPoint.Y,
-                secondPoint.Z - startPoint.Z
-            );
-
-            // Step 2: Normalize the direction vector
-            direction.Normalize();
-
-            // Step 3: Scale the direction vector by the distance
-            Vector scaledVector = new Vector(
-                direction.X * distance,
-                direction.Y * distance,
-                direction.Z * distance
-            );
-
-            // Step 4: Calculate the new point by adding the scaled vector to the start point
-            Point newPoint = new Point(
-                startPoint.X + scaledVector.X,
-                startPoint.Y + scaledVector.Y,
-                startPoint.Z + scaledVector.Z
-            );
-
-            return newPoint;
-        }
-        private List<double> InputConverter(string input)
-        {
-            if (input == "")
-                return null;
-            string[] hold = input.Split(' ');
-            List<double> output = new List<double>();
-            foreach (string s in hold)
-            {
-                if (s.Contains('*'))
-                {
-                    string[] strings = s.Split('*');
-                    for (int i = 0; i < int.Parse(strings[0]); i++)
-                    {
-                        output.Add(double.Parse(strings[1]));
-                    }
-                }
-                else
-                {
-                    double d;
-                    if (double.TryParse(s, out d))
-                        output.Add(d);
-                }
-            }
-            return output;
-        }
-        private double CalculateFaceArea(Face_ face)
-        {
-            ArrayList facePoints = Get_Points(face.Face); // Assuming this method gets the list of points of the face
-
-            if (facePoints.Count < 3)
-                return 0.0; // A face must have at least 3 points to form a polygon
-
-            double totalArea = 0.0;
-            Point basePoint = facePoints[0] as Point;
-
-            // Iterate through the face points and form triangles with the base point
-            for (int i = 1; i < facePoints.Count - 1; i++)
-            {
-                Point point1 = facePoints[i] as Point;
-                Point point2 = facePoints[i + 1] as Point;
-
-                // Calculate the area of the triangle formed by basePoint, point1, and point2
-                totalArea += CalculateTriangleArea(basePoint, point1, point2);
-            }
-
-            return totalArea;
-        }
-        private static double CalculateTriangleArea(Point p1, Point p2, Point p3)
-        {
-            // Create vectors representing two sides of the triangle
-            Vector v1 = new Vector(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
-            Vector v2 = new Vector(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
-
-            // The area of the triangle is half the magnitude of the cross product of the vectors
-            Vector crossProduct = v1.Cross(v2);
-            double area = 0.5 * crossProduct.GetLength();
-            return area;
-        }
-
-        public static Tekla.Structures.Model.Plane ConvertGeometricPlaneToPlane(GeometricPlane geometricPlane)
-        {
-            // Extract the point on the plane
-            Point origin = geometricPlane.Origin;
-
-            // Extract the normal vector of the plane
-            Vector normal = geometricPlane.Normal;
-
-            // Create a new Plane using the origin and normal vector
-            Tekla.Structures.Model.Plane plane = new Tekla.Structures.Model.Plane();
-            plane.Origin = origin;
-            plane.AxisX = normal.Cross(new Vector(0, 0, 1)); // X-axis direction (perpendicular to Z-axis)
-            plane.AxisY = normal.Cross(plane.AxisX);         // Y-axis direction
-            plane.AxisX.Normalize();
-            plane.AxisY.Normalize();
-
-            return plane;
-        }
-
+        
+        
         public static double FindShortestAngleBetweenLines(Line line1, Line line2)
         {
             // Get the direction vectors of the lines
