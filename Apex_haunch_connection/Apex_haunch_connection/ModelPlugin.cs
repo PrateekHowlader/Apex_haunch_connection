@@ -895,9 +895,6 @@ namespace Apex_haunch_connection
             Weld1.Insert();
 
         }
-        
-        
-        
         public static double FindShortestAngleBetweenLines(Line line1, Line line2)
         {
             // Get the direction vectors of the lines
